@@ -1,9 +1,8 @@
-import { Carousel } from "@/components";
+import { Carousel, Header, NavBar } from "@/components";
 
 export default function Home() {
   return (
     <div>
-      header
       <Carousel></Carousel>
     </div>
   );

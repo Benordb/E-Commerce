@@ -1,1 +1,6 @@
 export * from "./Carousel"
+export * from "./NotFoundContent"
+export * from "./Header"
+export * from "./NavBar"
+export * from "./Footer"
+export * from "./Foot"

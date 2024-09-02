@@ -1,7 +1,9 @@
 import { PropsWithChildren } from "react";
-
-
-
-export const Container = ({ children }: PropsWithChildren) => {
-    return <div className="max-w-[1241px] bg-slate-200 m-auto">{children}</div>
+type PropsWithChildrenWithBackground = {
+    background: string;
+} & PropsWithChildren
+export const Container = ({ children, background }: PropsWithChildrenWithBackground) => {
+    return <div className={background}>
+        <div className="max-w-[1241px] m-auto">{children}</div>
+    </div>
 }

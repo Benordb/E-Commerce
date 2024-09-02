@@ -14,9 +14,9 @@ export const Carousel = () => {
         }, 5000);
         return () => clearInterval(interval);
     });
-    // console.log(carousel)
+    console.log(carousel)
     return (
-        <Container>
+        <Container background=" bg-[#F2F0FF]">
             <div className="h-96 xl:h-[36rem] mx-4 xl:mx-0 rounded-2xl xl:rounded-none bg-white relative overflow-hidden">
                 <div
                     style={{ transform: `translateX(-${(percent * 100) / 4}%)` }}
@@ -24,19 +24,19 @@ export const Carousel = () => {
                         }`}
                 >
                     <div
-                        style={{ backgroundImage: `url(${carousel[0]})` }}
-                        className="w-1/4 bg-red-200 h-full bg-cover bg-center relative"
+                        style={{ backgroundImage: `url(https://res.cloudinary.com/dqhguhv7o/image/upload/v1723171049/cld-sample-2.jpg)` }}
+                        className="w-1/4 bg-[#F2F0FF] h-full bg-cover bg-center relative"
                     ></div>
                     <div
-                        style={{ backgroundImage: `url(${carousel[1]})` }}
+                        style={{ backgroundImage: `url(https://res.cloudinary.com/dqhguhv7o/image/upload/v1723171049/cld-sample.jpg)` }}
                         className="w-1/4 bg-green-200 h-full bg-cover bg-center relative"
                     ></div>
                     <div
-                        style={{ backgroundImage: `url(${carousel[2]})` }}
+                        style={{ backgroundImage: `url(https://res.cloudinary.com/dqhguhv7o/image/upload/v1723171048/samples/coffee.jpg)` }}
                         className="w-1/4 bg-red-200 h-full bg-cover bg-center relative"
                     ></div>
                     <div
-                        style={{ backgroundImage: `url(${carousel[0]})` }}
+                        style={{ backgroundImage: `url(https://res.cloudinary.com/dqhguhv7o/image/upload/v1723171049/cld-sample-2.jpg)` }}
                         className="w-1/4 bg-blue-200 h-full bg-cover bg-center relative"
                     ></div>
                 </div>
