@@ -1,10 +1,12 @@
-import { Carousel, Header, NavBar, Special } from "@/components";
+import { AboutService, AddedProducts, Carousel, HighLight } from "@/components";
 
 export default function Home() {
   return (
     <div>
-      <Carousel></Carousel>
-      <Special></Special>
+      <Carousel />
+      <HighLight />
+      <AddedProducts />
+      <AboutService />
     </div>
   );
 }

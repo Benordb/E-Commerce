@@ -2,13 +2,11 @@ import { NotFoundContent } from "@/components";
 
 // import { NotFoundContent } from "@/components";
 export default function NotFound() {
-return(
+  return (
 
-<div>
+    <div >
+      <NotFoundContent />
+    </div>
 
-  <h1>Page Not Found</h1>
-  <NotFoundContent/>
-</div>
-
-)
+  )
 }

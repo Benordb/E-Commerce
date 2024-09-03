@@ -1,15 +1,20 @@
 "use client"
-import { useRef } from 'react'
+import { PropsWithChildren, useRef } from 'react'
 import { useHover } from 'usehooks-ts'
 import { LuHeart, LuSearch, LuShoppingCart } from "react-icons/lu";
-export const SpecialCard = () => {
+type HighLightCardProps = {
+    title: string,
+    price: number,
+    images: string[]
+} & PropsWithChildren;
+export const HighLightCard = ({ title, price, images }: HighLightCardProps) => {
     const hoverRef = useRef(null)
     const isHover = useHover(hoverRef)
     return (
         <div ref={hoverRef} className="w-64 h-96 shadow-2xl">
             <div className={`flex items-center justify-center duration-300 py-2 relative`}>
                 <div style={{
-                    backgroundImage: `url(https://res.cloudinary.com/dqhguhv7o/image/upload/v1723171048/samples/chair.png)`,
+                    backgroundImage: `url(${images[0]})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }} className=" w-56 h-56 "></div>
@@ -24,7 +29,7 @@ export const SpecialCard = () => {
             </div>
             <div className='h-36 overflow-hidden'>
                 <div className={`h-full flex flex-col items-center justify-between  duration-300 pt-4 pb-6 ${isHover ? '' : ''}`}>
-                    <p className={isHover ? 'z-10 text-white duration-700 ease-in' : 'text-buttonP'}>Дан хүрэм пиджак</p>
+                    <p className={`w-40  text-center ${isHover ? 'z-10 text-white duration-700 ease-in' : 'text-buttonP'}`}>{title}</p>
                     <p className={isHover ? 'z-10 text-white' : ''}>750’000₮</p>
                 </div>
                 <div className={isHover ? 'h-full -translate-y-full duration-700 bg-' : ''}>
