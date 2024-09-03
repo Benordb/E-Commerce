@@ -14,7 +14,6 @@ export const Carousel = () => {
         }, 5000);
         return () => clearInterval(interval);
     });
-    console.log(carousel)
     return (
         <Container background=" bg-[#F2F0FF]">
             <div className="h-96 xl:h-[36rem] mx-4 xl:mx-0 rounded-2xl xl:rounded-none bg-white relative overflow-hidden">
