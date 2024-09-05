@@ -11,7 +11,7 @@ export const HighLightCard = ({ title, price, images }: HighLightCardProps) => {
     const hoverRef = useRef(null)
     const isHover = useHover(hoverRef)
     return (
-        <div ref={hoverRef} className="w-64 h-96 shadow-2xl">
+        <div ref={hoverRef} className="w-64 h-96 shadow-xl">
             <div className={`flex items-center justify-center duration-300 py-2 relative`}>
                 <div style={{
                     backgroundImage: `url(${images[0]})`,
