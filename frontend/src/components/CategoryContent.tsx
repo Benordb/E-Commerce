@@ -1,5 +1,22 @@
-import { Container, ProductGridCard } from "./assets"
-
+import React from 'react'
+import { Container, ProductGridCard } from './assets'
+const categoriesData = [
+    "Малгай",
+    "Усны сав",
+    "T-shirt",
+    "Hoodie",
+    "Tee",
+    "Цүнх"
+]
+const sizesData = [
+    "Free",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2XL",
+    "3XL",
+]
 type productsData = {
     id: number,
     image: string[],
@@ -122,17 +139,27 @@ const productsData: productsData[] = [
         title: "All Smiles Nalgene"
     }
 ]
-
-export const ProductsGrid = () => {
+export const CategoryContent = () => {
     return (
         <Container>
-            <div style={{
-                backgroundImage: `url(https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611133/image_1174_vjw7jg.jpg)`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }} className="h-[446px] rounded-2xl mb-8"></div>
-            <div className="grid grid-cols-4 grid-rows-6 [&>div:nth-child(7)]:h-[700px] [&>div:nth-child(8)]:h-[700px] [&>div:nth-child(7)]:col-span-2 [&>div:nth-child(7)]:row-span-2 [&>div:nth-child(8)]:col-span-2 [&>div:nth-child(8)]:row-span-2 gap-5">
-                {productsData.map((product, index) => (<ProductGridCard key={index} id={product.id} title={product.title} price={product.price} images={product.image} discount={product.discount} favorite={product.favorite} index={index} />))}
+            <div className='grid grid-cols-4'>
+                <div className='space-y-12'>
+                    <div className='space-y-4'>
+                        <p className='font-bold'>Ангилал</p>
+                        <ul className='text-sm space-y-2'>
+                            {categoriesData.map((category, index) => (<li key={index}>{category}</li>))}
+                        </ul>
+                    </div>
+                    <div className='space-y-4'>
+                        <p className='font-bold'>Хэмжээ</p>
+                        <ul className='text-sm space-y-2'>
+                            {sizesData.map((size, index) => (<li key={index}>{size}</li>))}
+                        </ul>
+                    </div>
+                </div>
+                <div className='grid grid-cols-3 col-span-3 gap-5'>
+                    {productsData.map((product, index) => (<ProductGridCard key={index} id={product.id} title={product.title} price={product.price} images={product.image} discount={product.discount} favorite={product.favorite} />))}
+                </div>
             </div>
         </Container>
     )

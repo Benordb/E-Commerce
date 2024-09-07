@@ -1,5 +1,9 @@
+import { ProductDetails } from "@/components";
+
 export default function ProductDetail() {
     return (
-        <p>ProductDetail</p>
+        <>
+            <ProductDetails />
+        </>
     )
 }
