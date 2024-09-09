@@ -1,5 +1,5 @@
 import React from 'react'
-import { OrderHistoryCard } from './OrderHistoryCard';
+import { OrderHistoryCard } from './assets'
 export const OrderHistory = () => {
     return (
         <div className='divide-y space-y-6'>
