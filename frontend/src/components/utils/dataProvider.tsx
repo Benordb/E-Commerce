@@ -15,7 +15,6 @@ const carouselData = [
     "https://res.cloudinary.com/dzm85pldh/image/upload/v1724812144/carousel2_wprz02.png",
     "https://res.cloudinary.com/dzm85pldh/image/upload/v1724812150/carousel1_k6q85b.png"
 ];
-
 export const DataProvider = ({ children }: PropsWithChildren) => {
 
     const [carousel, setCarousel] = useState<string[]>(carouselData);

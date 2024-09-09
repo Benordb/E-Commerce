@@ -45,14 +45,14 @@ export const ProductGridCard = ({ id, price, title, images, index, discount, fav
         return `${discount}%`
     }
     return (
-        <div onClick={() => router.push(`/product/${id}`)} key={price} className="mb-6 space-y-2">
+        <div key={price} className="mb-6 space-y-2">
             <div className='overflow-hidden rounded-2xl relative'>
-                <div style={{
+                <div onClick={() => router.push(`/product/${id}`)} style={{
                     backgroundImage: `url(${images})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                }} className={`bg-gray-20 cursor-pointer duration-300 hover:scale-125 ${costumHeight}`}></div>
-                {favorite?.includes(id) ? <PiHeartStraightFill className='w-6 h-6 absolute top-4 right-4 text-black' /> : <PiHeartStraight className='w-6 h-6 absolute top-4 right-4 text-black' />}
+                }} className={`bg-gray-20 cursor-grab duration-300 hover:scale-125 ${costumHeight}`}></div>
+                {favorite?.includes(id) ? <PiHeartStraightFill className='w-6 h-6 absolute top-4 right-4 text-black cursor-pointer' /> : <PiHeartStraight className='w-6 h-6 absolute top-4 right-4 text-black cursor-pointer' />}
             </div>
             <div>
                 <div>{title}</div>
