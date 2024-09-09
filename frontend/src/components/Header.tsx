@@ -1,10 +1,13 @@
+"use client"
 import React from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { IoSearchOutline } from "react-icons/io5";;
 import { PiHeartStraight, PiShoppingCartSimpleLight } from "react-icons/pi";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 export const Header = () => {
+    const router = useRouter()
     return (
         <div className='bg-black text-white flex justify-between px-8 py-4 mb-14'>
             <div className='flex items-center gap-4 w-72'>
@@ -23,8 +26,8 @@ export const Header = () => {
                 <PiHeartStraight className='w-5 h-5' />
                 <PiShoppingCartSimpleLight className='w-6 h-6' />
                 <div className='space-x-2'>
-                    <Button className='border border-blue-600 bg-transparent'>Бүртгүүлэх</Button>
-                    <Button className='bg-blue-600'>Нэвтрэх</Button>
+                    <Button onClick={() => router.push("/register")} className='border border-blue-600 bg-transparent'>Бүртгүүлэх</Button>
+                    <Button onClick={() => router.push("/login")} className='bg-blue-600'>Нэвтрэх</Button>
                 </div>
             </div>
         </div>
