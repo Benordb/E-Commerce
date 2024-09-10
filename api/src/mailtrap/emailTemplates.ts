@@ -288,7 +288,7 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `<!DOCTYPE html>
         <div class="content">
             <p>Hello [User's Name],</p>
             <p>We received a request to reset your password. Click the button below to set a new password:</p>
-            <a href="[Password Reset Link]" class="button">Reset Password</a>
+            <a href="{resetPasswordCode}" class="button">reset password</a>
             <p>If you did not request a password reset, please ignore this email.</p>
             <p>Best regards,</p>
             <p>The [Your Company Name] Team</p>

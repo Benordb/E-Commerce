@@ -1,14 +1,13 @@
 "use client"
-import { ForgotPassword } from "@/components/ForgotPassword";
-import { OTP } from "@/components/OTP";
+import { ForgotPassword, OTP, ResetPassword } from "@/components";
 import { useState } from "react";
 
 
 export default function Forget() {
-    const [next, setNext] = useState(false)
+    const [next, setNext] = useState(0)
     return (
         <div className="h-96">
-            {next ? <OTP /> : <ForgotPassword setNext={setNext} />}
+            {next === 0 ? <OTP setNext={setNext} /> : next === 1 ? <ForgotPassword setNext={setNext} /> : <ResetPassword />}
         </div>
     );
 }

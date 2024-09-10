@@ -14,6 +14,7 @@ interface User {
     lastLogin: string;
     createdAt: string;
     updatedAt: string;
+    resetPasswordToken?: string;
     __v: number;
 }
 interface AuthContextType {

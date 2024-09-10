@@ -9,7 +9,7 @@ interface ForgetFormValues {
     email: string;
 }
 interface ForgotPasswordProps {
-    setNext: (next: boolean) => void;
+    setNext: (next: number) => void;
 }
 export const ForgotPassword = ({ setNext }: ForgotPasswordProps) => {
     const { forgotPassword } = useAuth()
@@ -25,7 +25,7 @@ export const ForgotPassword = ({ setNext }: ForgotPasswordProps) => {
         }),
         onSubmit: (values) => {
             forgotPassword(values.email)
-            setNext(true)
+            setNext(1)
         },
     });
 

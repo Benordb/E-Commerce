@@ -6,11 +6,16 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { useAuth } from "./utils/authProvider"
-
-export const OTP = () => {
+interface OTPProps {
+    setNext: (next: number) => void;
+}
+export const OTP = ({ setNext }: OTPProps) => {
     const [value, setValue] = useState("")
     const { user } = useAuth()
-    console.log(value)
+    // console.log(user)
+    if (user?.resetPasswordToken == value) {
+        setNext(2)
+    }
     return (
         <div className="w-[600px] m-auto space-y-6 text-center">
             <div className="w-fit m-auto">

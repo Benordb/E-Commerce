@@ -33,14 +33,14 @@ export const sendWelcomeEmail= async (email:string,name:string)=>{
         throw new Error(`Error sending welcome email:${err}`)
     }
 }
-export const sendPasswordResetEmail= async (email:string,resetURL:string)=>{
+export const sendPasswordResetEmail= async (email:string,resetToken:string)=>{
     const recipient =[{email}]
     try{
         const response=await client.send({
           from: sender,
           to: recipient,
           subject: "Reset your password",
-          html: PASSWORD_RESET_REQUEST_TEMPLATE.replace('[Password Reset Link]',resetURL),
+          html: PASSWORD_RESET_REQUEST_TEMPLATE.replace('{resetPasswordCode}',resetToken),
           category: "Password Reset",
         })
         console.log("Email sent successfully", response)
