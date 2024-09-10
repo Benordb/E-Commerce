@@ -40,9 +40,7 @@ export const ProductSizesButton = ({ sizes, chooseSize, setChooseSize }: SizesBu
             const availableSize = Object.keys(sizes).find(
                 (size) => sizes[size as keyof typeof sizes]! > 0
             );
-            if (availableSize) {
-                setChooseSize(availableSize);
-            }
+            if (availableSize) setChooseSize(availableSize)
         }
     }, [])
     return (

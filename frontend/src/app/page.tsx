@@ -1,7 +1,7 @@
 "use client"
 import { ProductsGrid } from "@/components";
-import { api } from "@/lib/axios";
-import { useEffect, useState } from "react";
+// import { api } from "@/lib/axios";
+// import { useEffect, useState } from "react";
 
 
 export default function Home() {

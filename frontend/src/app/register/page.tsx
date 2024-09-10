@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useFormik, FormikErrors, FormikTouched } from "formik";
 import * as yup from "yup";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 interface RegisterFormValues {
@@ -31,7 +30,7 @@ export default function Register() {
             hasSpecialChar: /[@$!%*?&#,.]/.test(password),
         });
     };
-    const loginForm = useFormik<RegisterFormValues>({
+    const registerForm = useFormik<RegisterFormValues>({
         initialValues: {
             name: "",
             email: "",
@@ -65,57 +64,57 @@ export default function Register() {
         field: keyof RegisterFormValues,
         errors: FormikErrors<RegisterFormValues>,
         touched: FormikTouched<RegisterFormValues>
-    ) => loginForm.submitCount > 0 && errors[field] && touched[field];
+    ) => registerForm.submitCount > 0 && errors[field] && touched[field];
     return (
-        <form onSubmit={loginForm.handleSubmit} className="w-[334px] m-auto space-y-10">
+        <form onSubmit={registerForm.handleSubmit} className="w-[334px] m-auto space-y-12">
             <h1 className="font-semibold text-2xl text-center">Бүртгүүлэх</h1>
             <div className="space-y-4 text-sm">
                 <Input placeholder="Нэр"
                     id="name"
                     name="name"
                     type="text"
-                    onChange={loginForm.handleChange}
-                    onBlur={loginForm.handleBlur}
-                    value={loginForm.values.name} />
-                {showError("name", loginForm.errors, loginForm.touched) ? (
+                    onChange={registerForm.handleChange}
+                    onBlur={registerForm.handleBlur}
+                    value={registerForm.values.name} />
+                {showError("name", registerForm.errors, registerForm.touched) ? (
                     <label className="text-red-600 px-3">
-                        {loginForm.errors.name}
+                        {registerForm.errors.name}
                     </label>
                 ) : null}
                 <Input placeholder="Имэйл хаяг"
                     id="email"
                     name="email"
                     type="email"
-                    onChange={loginForm.handleChange}
-                    onBlur={loginForm.handleBlur}
-                    value={loginForm.values.email} />
-                {showError("email", loginForm.errors, loginForm.touched) ? (
+                    onChange={registerForm.handleChange}
+                    onBlur={registerForm.handleBlur}
+                    value={registerForm.values.email} />
+                {showError("email", registerForm.errors, registerForm.touched) ? (
                     <label className="text-red-600 px-3">
-                        {loginForm.errors.email}
+                        {registerForm.errors.email}
                     </label>
                 ) : null}
                 <Input placeholder="Нууц үг"
                     id="password"
                     name="password"
                     type="password"
-                    onChange={(e) => { loginForm.handleChange(e), validatePassword(e.target.value) }}
-                    onBlur={loginForm.handleBlur}
-                    value={loginForm.values.password} />
-                {showError("password", loginForm.errors, loginForm.touched) ? (
+                    onChange={(e) => { registerForm.handleChange(e), validatePassword(e.target.value) }}
+                    onBlur={registerForm.handleBlur}
+                    value={registerForm.values.password} />
+                {showError("password", registerForm.errors, registerForm.touched) ? (
                     <label className="text-red-600 px-3">
-                        {loginForm.errors.password}
+                        {registerForm.errors.password}
                     </label>
                 ) : null}
                 <Input placeholder="Нууц үг давтах "
                     id="re_password"
                     name="re_password"
                     type="password"
-                    onChange={loginForm.handleChange}
-                    onBlur={loginForm.handleBlur}
-                    value={loginForm.values.re_password} />
-                {showError("re_password", loginForm.errors, loginForm.touched) ? (
+                    onChange={registerForm.handleChange}
+                    onBlur={registerForm.handleBlur}
+                    value={registerForm.values.re_password} />
+                {showError("re_password", registerForm.errors, registerForm.touched) ? (
                     <label className="text-red-600 px-3">
-                        {loginForm.errors.re_password}
+                        {registerForm.errors.re_password}
                     </label>
                 ) : null}
                 <ul className="text-start list-disc list-inside mx-2 text-gray-500 space-y-1 text-xs">
