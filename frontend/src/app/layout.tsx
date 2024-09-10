@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 import { Footer, Header } from "@/components";
+import { AuthProvider } from "@/components/utils/authProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,11 +21,12 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-
-        <Header />
-        {children}
-        <Footer />
-
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
+        <Toaster richColors />
       </body>
     </html>
   );

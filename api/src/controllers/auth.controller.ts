@@ -1,8 +1,17 @@
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import dotenv from "dotenv";
+dotenv.config();
+
 import { Request, Response } from "express";
 import { User } from "../models/user.model";
-import bcrypt from "bcrypt";
+
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie";
-import { sendVerifyEmail, sendWelcomeEmail } from "../mailtrap/emails";
+import { sendPasswordResetEmail, sendVerifyEmail, sendWelcomeEmail,sendResetSuccessEmail } from "../mailtrap/emails";
+
+interface CustomRequest extends Request {
+  userId?: string;
+}
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -90,3 +99,61 @@ export const logout = async (req: Request, res: Response) => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out successfully" });
 };
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try{
+    const user = await User.findOne({ email });
+    if(!user){
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetExpires =new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetExpires;
+
+    await user.save();
+
+    await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+
+    res.status(200).json({ message: "Reset password code sent to your email" });
+
+  }catch(err: any){
+    res.status(500).json({ message: err.message });
+  }
+}
+export const resetPassword= async (req: Request, res: Response)=>{
+  try{
+    const {token}=req.params;
+    const {password}=req.body;
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+    if(!user){
+      return res.status(404).json({ message: "Password reset token expired or invalid" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    await sendResetSuccessEmail(user.email)
+
+    res.status(200).json({ message: "Password reset successfully" });
+  }catch(err: any){
+    res.status(500).json({ message: err.message });
+  }
+}
+export const checkAuth =async (req: CustomRequest, res: Response) => {
+  try{
+    const user= await User.findById(req.userId).select('-password')
+    if(!user) return res.status(404).json({ message: "user not found" });
+    res.json({ user });
+  }catch(err: any){
+    res.status(500).json({ message: err.message });
+  }
+}

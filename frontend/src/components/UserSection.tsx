@@ -1,10 +1,13 @@
+"use client"
 import React from 'react'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
+import { useRouter } from 'next/navigation'
 
 
 export const UserSection = () => {
+    const router = useRouter()
     return (
         <div className='divide-y space-y-6'>
             <p>Хэрэглэгчийн хэсэг</p>
@@ -30,6 +33,7 @@ export const UserSection = () => {
                     <Textarea id="address" className='min-h-24' />
                 </div>
                 <button className='bg-blue-600 rounded-full px-4 py-2 text-white items-end'>Мэдээлэл шинэчлэх</button>
+                <button onClick={() => router.push("/forget")} className='bg-blue-600 rounded-full px-4 py-2 text-white items-end ml-4'>Нууц үг шинэчлэх</button>
             </div>
         </div>
     )

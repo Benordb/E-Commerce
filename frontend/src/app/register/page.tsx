@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useFormik, FormikErrors, FormikTouched } from "formik";
 import * as yup from "yup";
 import { useState } from "react";
+import { useAuth } from "@/components/utils/authProvider";
 
 interface RegisterFormValues {
     name: string;
@@ -15,6 +16,7 @@ interface RegisterFormValues {
 
 export default function Register() {
     const router = useRouter()
+    const { register } = useAuth()
     const [passwordChecks, setPasswordChecks] = useState({
         hasUppercase: false,
         hasLowercase: false,
@@ -57,7 +59,7 @@ export default function Register() {
                 .required("Нууц үгээ давтан оруулна уу"),
         }),
         onSubmit: (values) => {
-            console.log(values)
+            register(values.name, values.email, values.password)
         },
     });
     const showError = (

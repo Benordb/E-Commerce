@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './database/connectionDB';
 import authRouter from './routes/auth.route';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3030;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/auth", authRouter);
 

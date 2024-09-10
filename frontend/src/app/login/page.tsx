@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation";
 import { useFormik, FormikErrors, FormikTouched } from "formik";
 import * as yup from "yup";
 import Link from "next/link";
-import { api } from "@/lib/axios";
+import { useAuth } from "@/components/utils/authProvider";
 interface LoginFormValues {
     email: string;
     password: string;
 }
 export default function Login() {
     const router = useRouter()
+    const { login } = useAuth()
     const loginForm = useFormik<LoginFormValues>({
         initialValues: {
             email: "",
@@ -32,15 +33,6 @@ export default function Login() {
             login(values.email, values.password)
         },
     });
-    const login = async (email: string, password: string) => {
-        try {
-            const res = await api.post("/auth/login", { email, password });
-            console.log(res.data.message)
-            router.replace("/");
-        } catch (err) {
-            console.log(err);
-        }
-    };
     const showError = (
         field: keyof LoginFormValues,
         errors: FormikErrors<LoginFormValues>,
