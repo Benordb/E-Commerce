@@ -46,7 +46,7 @@ export const ProductGridCard = ({ id, price, title, images, index, discount, fav
     }
     return (
         <div key={price} className="mb-6 space-y-2">
-            <div className='overflow-hidden rounded-2xl relative'>
+            <div className='overflow-hidden rounded-2xl relative shadow-xl'>
                 <div onClick={() => router.push(`/product/${id}`)} style={{
                     backgroundImage: `url(${images})`,
                     backgroundSize: "cover",
