@@ -77,7 +77,7 @@ export const ProductDetails = () => {
             }
         }
         getProduct()
-    }, [])
+    }, [id])
     useEffect(() => {
         const getProducts = async () => {
             try {

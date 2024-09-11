@@ -42,7 +42,7 @@ export const ProductSizesButton = ({ sizes, chooseSize, setChooseSize }: SizesBu
             );
             if (availableSize) setChooseSize(availableSize)
         }
-    }, [])
+    }, [setChooseSize, sizes])
     return (
         <div className='space-y-2'>
             <p className='underline underline-offset-4 text-sm'>Хэмжээний заавар</p>

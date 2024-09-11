@@ -3,11 +3,9 @@ import React from 'react'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
-import { useRouter } from 'next/navigation'
 
 
 export const UserSection = () => {
-    const router = useRouter()
     return (
         <div className='divide-y space-y-6'>
             <p>Хэрэглэгчийн хэсэг</p>
