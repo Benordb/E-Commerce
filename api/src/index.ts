@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './database/connectionDB';
-import authRouter from './routes/auth.route';
 import cookieParser from 'cookie-parser';
+import { connectDB } from './database/connectionDB';
+import { authRouter, categoryRouter, productRouter } from './routes';
 
 dotenv.config();
 
@@ -15,6 +15,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/auth", authRouter);
+app.use("/product",productRouter)
+app.use("/category",categoryRouter)
 
 app.get('/',(_req, res) => {
   res.json({message:'Hello, world!'});

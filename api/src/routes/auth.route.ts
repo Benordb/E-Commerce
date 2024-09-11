@@ -13,4 +13,5 @@ authRouter
     .post("/forgot-password",forgotPassword)
     .post("/reset-password/:token",resetPassword)
 
-export default authRouter;
+
+export {authRouter};

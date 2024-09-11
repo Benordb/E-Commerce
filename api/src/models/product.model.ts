@@ -19,6 +19,10 @@ const productSchema = new mongoose.Schema(
       "2xl": { type: Number, required: false },
       "3xl": { type: Number, required: false },
     },
+    description: {
+      type: String,
+      required: true,
+    },
     thumbnails: {
       type: String,
       required: false,
@@ -26,7 +30,7 @@ const productSchema = new mongoose.Schema(
     images: [
       {
         type: String,
-        requiredd: false,
+        required: false,
       },
     ],
     salePercent: {
@@ -43,11 +47,11 @@ const productSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
-    category: {
-      type: [Schema.Types.ObjectId],
-      ref: "Category",
-      required: true,
-    },
+    category:{
+        type: [Schema.Types.ObjectId],
+        ref: "Category",
+        required: true,
+      },
   },
   { timestamps: true }
 );
