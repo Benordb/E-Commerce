@@ -22,11 +22,11 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, email: string, password: string) => Promise<void>;
     forgotPassword: (email: string) => Promise<void>;
-
+    logout: () => Promise<void>;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const authPaths = ["/login", "/register", "/", "/product", "/category"];
+const authPaths = ["/save", "/buy"];
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
     const router = useRouter();
@@ -79,13 +79,27 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             }
         }
     }
+    const logout = async () => {
+        try {
+            const res = await api.post("/auth/logout")
+            Cookies.remove("token");
+            setUser(null)
+            toast.success(res.data.message)
+        } catch (err: unknown) {
+            console.log(err)
+            if (err instanceof AxiosError) {
+                toast.error(err.response?.data?.message || "Failed to logout")
+            } else {
+                toast.error("An unknown error occurred")
+            }
+        }
+    }
     useEffect(() => {
         const loadUser = async () => {
             try {
                 setIsReady(false);
 
                 const token = Cookies.get("token");
-
                 if (!token) return;
 
                 const res = await api.get("/auth/check-auth", {
@@ -112,7 +126,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }, []);
 
     useEffect(() => {
-        if (authPaths.includes(pathname)) return;
+        if (!authPaths.includes(pathname)) return;
 
         if (!isReady) return;
 
@@ -121,7 +135,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     if (!isReady) return null;
     return (
-        <AuthContext.Provider value={{ user, login, register, forgotPassword }}>
+        <AuthContext.Provider value={{ user, login, register, forgotPassword, logout }}>
             {children}
         </AuthContext.Provider>
     );

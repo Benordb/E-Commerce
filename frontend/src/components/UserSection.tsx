@@ -33,7 +33,6 @@ export const UserSection = () => {
                     <Textarea id="address" className='min-h-24' />
                 </div>
                 <button className='bg-blue-600 rounded-full px-4 py-2 text-white items-end'>Мэдээлэл шинэчлэх</button>
-                <button onClick={() => router.push("/forget")} className='bg-blue-600 rounded-full px-4 py-2 text-white items-end ml-4'>Нууц үг шинэчлэх</button>
             </div>
         </div>
     )

@@ -4,10 +4,15 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { Request, Response } from "express";
-import { User } from "../models/user.model";
 
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie";
-import { sendPasswordResetEmail, sendVerifyEmail, sendWelcomeEmail,sendResetSuccessEmail } from "../mailtrap/emails";
+import {
+  sendPasswordResetEmail,
+  sendVerifyEmail,
+  sendWelcomeEmail,
+  sendResetSuccessEmail,
+} from "../mailtrap/emails";
+import { User } from "../models";
 
 interface CustomRequest extends Request {
   userId?: string;
@@ -19,8 +24,8 @@ export const login = async (req: Request, res: Response) => {
     const user = await User.findOne({ email });
     if (!user || !(await bcrypt.compare(password, user.password)))
       return res.status(401).json({ message: "Invalid email or password" });
-    if (!user.isVerified)
-      return res.status(403).json({ message: "Email not verified" });
+    // if (!user.isVerified)
+    //   return res.status(403).json({ message: "Email not verified" });
     const token = generateTokenAndSetCookie(res, user._id.toString());
     user.lastLogin = new Date();
     await user.save();
@@ -83,7 +88,7 @@ export const register = async (req: Request, res: Response) => {
     });
     await user.save();
     generateTokenAndSetCookie(res, user._id.toString());
-    await sendVerifyEmail(user.email, verifyToken);
+    // await sendVerifyEmail(user.email, verifyToken);
     res.status(200).json({
       message: "Success",
       user: {
@@ -101,39 +106,43 @@ export const logout = async (req: Request, res: Response) => {
 };
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
-  try{
+  try {
     const user = await User.findOne({ email });
-    if(!user){
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetExpires =new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const resetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = resetExpires;
 
     await user.save();
 
-    await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}/forget/${resetToken}`);
+    await sendPasswordResetEmail(
+      user.email,
+      `${process.env.CLIENT_URL}/forget/${resetToken}`
+    );
 
     res.status(200).json({ message: "Reset password code sent to your email" });
-
-  }catch(err: any){
+  } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
-}
-export const resetPassword= async (req: Request, res: Response)=>{
-  try{
-    const {token}=req.params;
-    const {password}=req.body;
+};
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
 
     const user = await User.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },
     });
-    if(!user){
-      return res.status(404).json({ message: "Password reset token expired or invalid" });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "Password reset token expired or invalid" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
@@ -141,19 +150,19 @@ export const resetPassword= async (req: Request, res: Response)=>{
     user.resetPasswordExpires = undefined;
     await user.save();
 
-    await sendResetSuccessEmail(user.email)
+    await sendResetSuccessEmail(user.email);
 
     res.status(200).json({ message: "Password reset successfully" });
-  }catch(err: any){
+  } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
-}
-export const checkAuth =async (req: CustomRequest, res: Response) => {
-  try{
-    const user= await User.findById(req.userId).select('-password')
-    if(!user) return res.status(404).json({ message: "user not found" });
+};
+export const checkAuth = async (req: CustomRequest, res: Response) => {
+  try {
+    const user = await User.findById(req.userId).select("-password");
+    if (!user) return res.status(404).json({ message: "user not found" });
     res.json({ user });
-  }catch(err: any){
+  } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
-}
+};

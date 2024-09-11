@@ -12,7 +12,6 @@ export default function Home() {
       setResult(res.data.message)
     }
     getData()
-    console.log(result)
   })
   return (
     <>
