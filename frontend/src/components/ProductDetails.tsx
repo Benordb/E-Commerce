@@ -120,7 +120,6 @@ export const ProductDetails = () => {
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                         }} className="h-[521px] w-[422px] rounded-2xl cursor-move"></div>
-                        {/* <Image className='rounded-2xl' src='/imageW.png' width={422} height={521} alt="" /> */}
                     </div>
                     <div className='flex-1'>
                         <div className='h-[521px] space-y-6 flex flex-col justify-center relative'>
