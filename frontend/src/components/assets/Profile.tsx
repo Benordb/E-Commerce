@@ -6,7 +6,6 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../utils/authProvider';
 interface ProfileProps {
