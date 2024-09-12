@@ -8,12 +8,7 @@ import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { api } from '@/lib/axios';
 type productsData = {
-    id: number,
-    images: string[],
-    price: number,
-    title: string,
-    description?: string,
-    discount?: number,
+    id: string,
     sizes?: {
         Free?: number,
         S?: number,
@@ -23,20 +18,12 @@ type productsData = {
         "2XL"?: number,
         "3XL"?: number,
     };
-    favorite?: number[],
+    favorite?: string[],
     createdAt?: Date,
 
 }
 const oneProduct: productsData = {
-    id: 1,
-    images: ["https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611140/imageHat_qiq2za.png",
-        "https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611124/image12_eph1os.png",
-        "https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611130/imageBlack_wui8ww.png",
-        "https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611133/image14_uwhdov.png"],
-    price: 29000,
-    title: "The Prompt Magazine",
-    discount: 30,
-    description: "Зэрлэг цэцгийн зурагтай даавуун материалтай цамц",
+    id: "1",
     sizes: {
         Free: 0,
         S: 0,
@@ -47,14 +34,23 @@ const oneProduct: productsData = {
         "3XL": 10,
     },
     createdAt: new Date(),
-    favorite: [1]
+    favorite: ["2"]
 }
 interface productType {
-    _id: number,
+    _id: string,
     name: string,
     price: number,
     salePercent: number,
     description: string,
+    qty: {
+        free?: number;
+        s?: number;
+        m?: number;
+        l?: number;
+        xl?: number;
+        "2xl"?: number;
+        "3xl"?: number;
+    },
     images: string[],
 }
 
@@ -98,9 +94,9 @@ export const ProductDetails = () => {
     const [chooseSize, setChooseSize] = useState<string>('')
     const [pieces, setPieces] = useState<number>(1)
     const [showReview, setShowReview] = useState<boolean>(false)
-    const chooseSizePieces: number = oneProduct.sizes?.[chooseSize as keyof typeof oneProduct.sizes] || 0;
+    const chooseSizePieces: number = product?.qty?.[chooseSize as keyof typeof product.qty] || 0;
     const stringPrice = (price: number) => {
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
+        return (price * pieces).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
     }
     return (
         <Container>
@@ -132,7 +128,7 @@ export const ProductDetails = () => {
                                     </div>
                                     <p>{product?.description}</p>
                                 </div>
-                                <ProductSizesButton sizes={oneProduct.sizes} chooseSize={chooseSize} setChooseSize={setChooseSize} />
+                                <ProductSizesButton sizes={product?.qty} chooseSize={chooseSize} setChooseSize={setChooseSize} />
                                 <ProductPieces chooseSizePieces={chooseSizePieces} pieces={pieces} setPieces={setPieces} />
                             </div>
                             <div className='space-y-2'>

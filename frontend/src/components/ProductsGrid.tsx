@@ -153,7 +153,6 @@ export const ProductsGrid = () => {
         }
         getProducts()
     }, [])
-    console.log(products)
     return (
         <Container>
             <div style={{

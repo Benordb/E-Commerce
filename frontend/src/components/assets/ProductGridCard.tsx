@@ -3,12 +3,12 @@ import { useRouter } from 'next/navigation';
 import React, { PropsWithChildren } from 'react'
 import { PiHeartStraight, PiHeartStraightFill } from "react-icons/pi";
 type ProductGridCardProps = {
-    id: number,
+    id: string,
     index?: number,
     title: string,
     price: number,
     discount?: number,
-    favorite?: number[],
+    favorite?: string[],
     images: string[]
 } & PropsWithChildren;
 export const ProductGridCard = ({ id, price, title, images, index, discount, favorite }: ProductGridCardProps) => {

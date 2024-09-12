@@ -5,24 +5,24 @@ type SizesButtonProps = {
     chooseSize: string,
     setChooseSize: (value: string) => void,
     sizes?: {
-        Free?: number,
-        S?: number,
-        M?: number,
-        L?: number,
-        XL?: number,
-        "2XL"?: number,
-        "3XL"?: number,
+        free?: number;
+        s?: number;
+        m?: number;
+        l?: number;
+        xl?: number;
+        "2xl"?: number;
+        "3xl"?: number;
     },
 } & PropsWithChildren;
 
 const sizesData = [
-    "Free",
-    "S",
-    "M",
-    "L",
-    "XL",
-    "2XL",
-    "3XL"
+    "free",
+    "s",
+    "m",
+    "l",
+    "xl",
+    "2xl",
+    "3xl"
 ]
 
 export const ProductSizesButton = ({ sizes, chooseSize, setChooseSize }: SizesButtonProps) => {
@@ -53,7 +53,7 @@ export const ProductSizesButton = ({ sizes, chooseSize, setChooseSize }: SizesBu
                         onClick={() => handleSizeClick(size)}
                         className={`w-8 h-8 text-xs border border-black rounded-full ${chooseSize === size ? 'bg-black text-white' : ''} ${styleSize(sizes?.[size as keyof typeof sizes])}`}
                     >
-                        {size}
+                        {size == "free" ? "Free" : size.toUpperCase()}
                     </button>
                 ))}
             </div>

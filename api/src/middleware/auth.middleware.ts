@@ -21,7 +21,6 @@ export const verifyToken = (
     if (!decoded)
       return res.status(401).json({ message: "Нэвтрэнэ үү!-invalid token" });
     req.userId = decoded.userId;
-
     next();
   } catch (err) {
     return res.status(401).json({ message: "Нэвтрэнэ үү!" });
