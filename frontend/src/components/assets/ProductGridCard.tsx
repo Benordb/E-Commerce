@@ -2,17 +2,18 @@
 import { useRouter } from 'next/navigation';
 import React, { PropsWithChildren } from 'react'
 import { PiHeartStraight, PiHeartStraightFill } from "react-icons/pi";
+import { useData } from '../utils/dataProvider';
 type ProductGridCardProps = {
     id: string,
     index?: number,
     title: string,
     price: number,
     discount?: number,
-    favorite?: string[],
     images: string[]
 } & PropsWithChildren;
-export const ProductGridCard = ({ id, price, title, images, index, discount, favorite }: ProductGridCardProps) => {
+export const ProductGridCard = ({ id, price, title, images, index, discount }: ProductGridCardProps) => {
     const router = useRouter()
+    const { saveProduct, setSaveProduct } = useData()
     const costumHeight = index === 7 || index === 6 ? "h-[736px]" : "h-80"
     if (discount) {
 
@@ -44,6 +45,13 @@ export const ProductGridCard = ({ id, price, title, images, index, discount, fav
     const stringDiscount = (discount: number) => {
         return `${discount}%`
     }
+    const handleSave = () => {
+        setSaveProduct(prevProducts => [...prevProducts, id])
+    }
+    const handleRemoveSave = () => {
+        const newSaveProduct = saveProduct.filter(product => product !== id)
+        setSaveProduct(newSaveProduct)
+    }
     return (
         <div key={price} className="mb-6 space-y-2">
             <div className='overflow-hidden rounded-2xl relative shadow-xl'>
@@ -52,7 +60,7 @@ export const ProductGridCard = ({ id, price, title, images, index, discount, fav
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }} className={`bg-gray-20 cursor-grab duration-300 hover:scale-125 ${costumHeight}`}></div>
-                {favorite?.includes(id) ? <PiHeartStraightFill className='w-6 h-6 absolute top-4 right-4 text-black cursor-pointer' /> : <PiHeartStraight className='w-6 h-6 absolute top-4 right-4 text-black cursor-pointer' />}
+                {saveProduct?.includes(id) ? <PiHeartStraightFill onClick={handleRemoveSave} className='w-6 h-6 absolute top-4 right-4 text-black cursor-pointer' /> : <PiHeartStraight onClick={handleSave} className='w-6 h-6 absolute top-4 right-4 text-black cursor-pointer' />}
             </div>
             <div>
                 <div>{title}</div>

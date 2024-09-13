@@ -29,7 +29,7 @@ export const Header = () => {
             <div className='flex gap-6 items-center'>
                 <PiHeartStraight onClick={() => router.push("/save")} className='w-5 h-5 cursor-pointer hover:text-blue-600' />
                 <PiShoppingCartSimpleLight onClick={() => router.push("/buy")} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
-                {user ? (<Profile userName={user.name} />) : (<div className='space-x-2'>
+                {user?._id ? (<Profile userName={user.name} />) : (<div className='space-x-2'>
                     <Button onClick={() => router.push("/register")} className='border border-blue-600 bg-transparent'>Бүртгүүлэх</Button>
                     <Button onClick={() => router.push("/login")} className='bg-blue-600'>Нэвтрэх</Button>
                 </div>)}

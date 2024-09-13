@@ -24,7 +24,7 @@ interface AuthContextType {
     forgotPassword: (email: string) => Promise<void>;
     logout: () => Promise<void>;
 }
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 const authPaths = ["/save", "/buy"];
 
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     const router = useRouter();
     const pathname = usePathname();
 
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User>({} as User);
     const [isReady, setIsReady] = useState<boolean>(false);
     const login = async (email: string, password: string) => {
         try {
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         try {
             const res = await api.post("/auth/logout")
             Cookies.remove("token");
-            setUser(null)
+            setUser({} as User)
             toast.success(res.data.message)
         } catch (err: unknown) {
             console.log(err)

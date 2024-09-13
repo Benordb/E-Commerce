@@ -41,7 +41,7 @@ export const createReview: RequestHandler = async (req: CustomRequest, res) => {
       user: req.userId,
     });
     await newReview.save();
-    res.status(201).json({ review: newReview });
+    res.status(201).json({ message: "Success created review" });
   } catch (err: any) {
     res.status(500).json({ message: err.message });
   }

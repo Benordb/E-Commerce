@@ -1,14 +1,12 @@
 "use client"
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import { createContext, Dispatch, PropsWithChildren, SetStateAction, useContext, useState } from "react";
 interface DataContextType {
     carousel: string[];
-    setCarousel: (value: string[]) => void;
+    saveProduct: string[];
+    setSaveProduct: Dispatch<SetStateAction<string[]>>;
+    setCarousel: Dispatch<SetStateAction<string[]>>;
 }
-const defaultValue: DataContextType = {
-    carousel: [],
-    setCarousel: () => { },
-};
-const DataContext = createContext<DataContextType>(defaultValue);
+const DataContext = createContext<DataContextType>({} as DataContextType);
 
 const carouselData = [
     "https://res.cloudinary.com/dzm85pldh/image/upload/v1724812125/carousel3_soiorf.png",
@@ -16,11 +14,11 @@ const carouselData = [
     "https://res.cloudinary.com/dzm85pldh/image/upload/v1724812150/carousel1_k6q85b.png"
 ];
 export const DataProvider = ({ children }: PropsWithChildren) => {
-
     const [carousel, setCarousel] = useState<string[]>(carouselData);
+    const [saveProduct, setSaveProduct] = useState<string[]>([])
     return (
         <DataContext.Provider
-            value={{ carousel, setCarousel }}
+            value={{ saveProduct, setSaveProduct, carousel, setCarousel }}
         >
             {children}
         </DataContext.Provider>

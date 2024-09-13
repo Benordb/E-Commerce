@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { Footer, Header } from "@/components";
 import { AuthProvider } from "@/components/utils/authProvider";
+import { DataProvider } from "@/components/utils/dataProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,11 +22,13 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-        <AuthProvider>
-          <Header />
-          {children}
-          <Footer />
-        </AuthProvider>
+        <DataProvider>
+          <AuthProvider>
+            <Header />
+            {children}
+            <Footer />
+          </AuthProvider>
+        </DataProvider>
         <Toaster richColors />
       </body>
     </html>

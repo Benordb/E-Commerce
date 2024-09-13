@@ -1,23 +1,82 @@
-import React from 'react'
+"use client"
+import { api } from '@/lib/axios';
+import React, { useEffect, useState } from 'react'
 import { PiHeartStraightFill } from 'react-icons/pi'
+import { useData } from '../utils/dataProvider';
 
-export const SaveCard = () => {
+interface productType {
+    _id: string,
+    name: string,
+    price: number,
+    salePercent: number,
+    description: string,
+    images: string[],
+}
+interface SaveCardProps {
+    id: string
+}
+export const SaveCard = ({ id }: SaveCardProps) => {
+    const [product, setProduct] = useState<productType>();
+    const { saveProduct, setSaveProduct } = useData()
+    const handleRemoveSave = () => {
+        const newSaveProduct = saveProduct.filter(product => product !== id)
+        setSaveProduct(newSaveProduct)
+    }
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                const response = await api.get(`/product/${id}`)
+                setProduct(response.data.product)
+            } catch (err: unknown) {
+                console.log(err);
+            }
+        }
+        getProduct()
+    }, [id])
+    const showPrice = (price: number | undefined, discount: number | undefined) => {
+        price = price === undefined ? 0 : price;
+        const newPrice = stringPrice(price)
+        if (discount) {
+            const newDiscountedPrice = stringDiscountedPrice(price, discount)
+            const newDiscount = stringDiscount(discount)
+            return (
+                <div className='flex items-center gap-2'>
+                    <p className='font-bold'>{newDiscountedPrice}</p>
+                    <p className='text-xs line-through text-[#71717A]'>{newPrice}</p>
+                    <p className='font-bold text-red-500'>{newDiscount}</p>
+                </div>
+            )
+        } else {
+            return (
+                <p className='font-bold'>{newPrice}</p>
+            )
+        }
+    }
+    const stringPrice = (price: number) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
+    }
+    const stringDiscountedPrice = (price: number, discount: number): string => {
+        return (price - (price * discount / 100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
+    }
+    const stringDiscount = (discount: number) => {
+        return `${discount}%`
+    }
     return (
         <div className='flex w-full gap-6'>
             <div style={{
-                backgroundImage: `url(${"https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611140/imageHat_qiq2za.png"})`,
+                backgroundImage: `url(${product?.images[0]})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }} className='w-[120px] h-[120px] rounded-2xl'></div>
             <div className='w-80 space-y-2'>
                 <div className='space-y-1'>
-                    <h1>Chunky Glyph Tee</h1>
-                    <p className='font-bold text-sm'>120’000₮</p>
+                    <h1>{product?.name}</h1>
+                    <p className='font-bold text-sm'>{showPrice(product?.price, product?.salePercent)}</p>
                 </div>
                 <button className='bg-blue-600 px-3 py-1 text-white rounded-full text-sm'>Сагслах</button>
             </div>
             <button className='w-10 h-10 flex justify-center items-center'>
-                <PiHeartStraightFill className='w-6 h-6' />
+                <PiHeartStraightFill onClick={handleRemoveSave} className='w-6 h-6' />
             </button>
         </div>
     )

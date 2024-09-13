@@ -4,14 +4,6 @@ import { Container, ProductGridCard } from './assets'
 import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
-const categoriesData = [
-    "Малгай",
-    "Усны сав",
-    "T-shirt",
-    "Hoodie",
-    "Tee",
-    "Цүнх"
-]
 const sizesData = [
     "Free",
     "S",

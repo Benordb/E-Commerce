@@ -1,8 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { Container, ProductGridCard, ProductPieces, ProductSizesButton, ReviewCard, ReviewStars } from './assets'
+import { Container, CreateReview, ProductGridCard, ProductPieces, ProductSizesButton, ReviewCard, ReviewStars } from './assets'
 import { PiHeartStraight, PiHeartStraightFill } from 'react-icons/pi';
-import { Textarea } from './ui/textarea';
 import { useParams } from 'next/navigation';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
@@ -53,11 +52,19 @@ interface productType {
     },
     images: string[],
 }
-
+interface reviewType {
+    _id: string;
+    user: {
+        name: string;
+    };
+    star: number;
+    comment: string;
+}
 export const ProductDetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState<productType>();
     const [products, setProducts] = useState<productType[]>([]);
+    const [reviews, setReviews] = useState<reviewType[]>([])
     useEffect(() => {
         const getProduct = async () => {
             try {
@@ -90,6 +97,22 @@ export const ProductDetails = () => {
         }
         getProducts()
     }, [])
+    useEffect(() => {
+        const getReviews = async () => {
+            try {
+                const response = await api.get(`/review/product/${id}`)
+                setReviews(response.data.review)
+            } catch (err: unknown) {
+                console.log(err);
+                if (err instanceof AxiosError) {
+                    toast.error(err.response?.data?.message || "Login failed.");
+                } else {
+                    toast.error("An unknown error occurred.");
+                }
+            }
+        }
+        getReviews()
+    })
     const [chooseImage, setChooseImage] = useState(0)
     const [chooseSize, setChooseSize] = useState<string>('')
     const [pieces, setPieces] = useState<number>(1)
@@ -98,6 +121,8 @@ export const ProductDetails = () => {
     const stringPrice = (price: number) => {
         return (price * pieces).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
     }
+    const initialValue = 0;
+    const productReviewStar = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.star, initialValue,) / reviews.length
     return (
         <Container>
             <div className='space-y-20'>
@@ -140,29 +165,17 @@ export const ProductDetails = () => {
                                     <p>Үнэлгээ</p>
                                     <button onClick={() => setShowReview(!showReview)} className='text-blue-600 underline underline-offset-4'>бүгдийг {showReview ? 'хураах' : 'харах'}</button>
                                 </div>
-                                <div className='flex items-center'>
-                                    <ReviewStars percent={4.6} size={24} />
-                                    <p className='font-bold'>4.6</p>
-                                    <p className='text-gray-500'>(24)</p>
+                                <div className='flex items-center space-x-1'>
+                                    <ReviewStars percent={!productReviewStar ? 5 : productReviewStar} size={24} />
+                                    <p className='font-bold'>{productReviewStar ? productReviewStar : "5.0"}</p>
+                                    <p className='text-gray-500'>({reviews.length})</p>
                                 </div>
                             </div>
                         </div>
                         <div className={` w-full ${!showReview ? 'hidden' : null}`}>
-                            <div className='bg-gray-100 p-6 rounded-lg text-sm space-y-6 mt-6'>
-                                <div className='space-y-2'>
-                                    <p>Одоор үнэлэх:</p>
-                                    <ReviewStars percent={5} size={24} />
-                                </div>
-                                <div className='space-y-2'>
-                                    <p>Сэтгэгдэл үлдээх:</p>
-                                    <Textarea className='bg-white h-24' placeholder='Энд бичнэ үү' />
-                                </div>
-                                <button className='px-9 py-2 bg-blue-600 rounded-full text-white'>Үнэлэх</button>
-                            </div>
+                            <CreateReview productId={id} />
                             <div className='space-y-5 divide-y divide-dashed'>
-                                <ReviewCard comment={"sainuu nzuuda 😆"} star={4} userName={"Saraa"} />
-                                <ReviewCard comment={"sainuu nzuudanvcsducds cdisu vgfdfjb fdgfbdhvjsvchds dscbsicvhdsc  cshudcvhuudskvcugvd"} star={3.9} userName={"Saraa"} />
-                                <ReviewCard comment={"sainuu nzuudanvcsducds cdisu vgfdfjb fdgfbdhvjsvchds dscbsicvhdsc  cshudcvhuudskvcugvd"} star={4} userName={"Saraa"} />
+                                {reviews.map((review, index) => <ReviewCard key={index} star={review.star} userName={review.user.name} comment={review.comment} />)}
                             </div>
                         </div>
                     </div>
