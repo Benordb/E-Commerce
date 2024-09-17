@@ -6,35 +6,8 @@ import { useParams } from 'next/navigation';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { api } from '@/lib/axios';
-type productsData = {
-    id: string,
-    sizes?: {
-        Free?: number,
-        S?: number,
-        M?: number,
-        L?: number,
-        XL?: number,
-        "2XL"?: number,
-        "3XL"?: number,
-    };
-    favorite?: string[],
-    createdAt?: Date,
+import { useData } from './utils/dataProvider';
 
-}
-const oneProduct: productsData = {
-    id: "1",
-    sizes: {
-        Free: 0,
-        S: 0,
-        M: 0,
-        L: 0,
-        XL: 10,
-        "2XL": undefined,
-        "3XL": 10,
-    },
-    createdAt: new Date(),
-    favorite: ["2"]
-}
 interface productType {
     _id: string,
     name: string,
@@ -113,6 +86,7 @@ export const ProductDetails = () => {
         }
         getReviews()
     })
+    const { saveProduct, setSaveProduct } = useData()
     const [chooseImage, setChooseImage] = useState(0)
     const [chooseSize, setChooseSize] = useState<string>('')
     const [pieces, setPieces] = useState<number>(1)
@@ -122,7 +96,15 @@ export const ProductDetails = () => {
         return (price * pieces).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
     }
     const initialValue = 0;
-    const productReviewStar = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.star, initialValue,) / reviews.length
+    const productReviewStarNumber = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.star, initialValue,) / reviews.length
+    const productReviewStar = Number(productReviewStarNumber.toFixed(1))
+    const handleSave = () => {
+        setSaveProduct(prevProducts => [...prevProducts, id as string])
+    }
+    const handleRemoveSave = () => {
+        const newSaveProduct = saveProduct.filter(product => product !== id)
+        setSaveProduct(newSaveProduct)
+    }
     return (
         <Container>
             <div className='space-y-20'>
@@ -149,7 +131,7 @@ export const ProductDetails = () => {
                                     <div className='border border-blue-500 text-xs font-semibold py-[2px] px-[10px] w-fit rounded-full'>шинэ</div>
                                     <div className='flex items-center gap-4'>
                                         <p className='font-bold text-2xl'>{product?.name}</p>
-                                        {oneProduct.favorite?.includes(oneProduct.id) ? <PiHeartStraightFill className='w-6 h-6 top-4 right-4 text-black' /> : <PiHeartStraight className='w-6 h-6 top-4 right-4 text-black' />}
+                                        {saveProduct?.includes(id as string) ? <PiHeartStraightFill onClick={handleRemoveSave} className='w-6 h-6 top-4 right-4 text-black' /> : <PiHeartStraight onClick={handleSave} className='w-6 h-6 top-4 right-4 text-black' />}
                                     </div>
                                     <p>{product?.description}</p>
                                 </div>

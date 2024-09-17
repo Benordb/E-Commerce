@@ -10,7 +10,7 @@ import Cookies from "js-cookie"
 
 
 interface CreateReviewProps {
-    productId: string | string[]
+    productId: string | string[];
 }
 export const CreateReview = ({ productId }: CreateReviewProps) => {
     const [star, setStar] = useState<number>(5)
@@ -36,10 +36,10 @@ export const CreateReview = ({ productId }: CreateReviewProps) => {
     }
     const handleCreate = () => {
         if (comment === '') return
+        setComment('nice')
+        setStar(5)
         createReview()
     }
-    setComment('')
-    setStar(5)
     return (
         <div className={`bg-gray-100 p-6 rounded-lg text-sm space-y-6 mt-6 ${!user?._id ? "hidden" : null}`}>
             <div className='space-y-2'>
