@@ -13,7 +13,7 @@ export const Header = () => {
     const router = useRouter()
     const { user } = useAuth()
     return (
-        <div className='bg-black text-white flex justify-between px-8 py-4 mb-14'>
+        <div className='bg-black text-white flex justify-between px-8 py-4 mb-14 z-10'>
             <div className='flex items-center gap-4 w-72'>
                 <Link href='/'>
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

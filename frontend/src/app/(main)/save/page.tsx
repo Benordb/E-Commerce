@@ -12,7 +12,7 @@ export default function Save() {
             </div>
             <div className="flex justify-between text-lg font-bold">
                 <p>Нийт: {saveProduct.length} бараа</p>
-                <p>360’000₮</p>
+                <p>{saveProduct.length == 0 ? '0₮' : '360’000₮'}</p>
             </div>
         </div>
     )
