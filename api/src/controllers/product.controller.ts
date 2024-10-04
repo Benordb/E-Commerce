@@ -13,7 +13,9 @@ interface Qty {
 
 export const getAllProducts: RequestHandler = async (_req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}).populate("category", {
+      name: true,
+    });
     return res.status(200).json({
       products,
     });

@@ -1,6 +1,6 @@
 "use client"
 import { api } from '@/lib/axios';
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { PiHeartStraightFill } from 'react-icons/pi'
 import { useData } from '../utils/dataProvider';
 
@@ -13,15 +13,17 @@ interface productType {
     images: string[],
 }
 interface SaveCardProps {
-    id: string
+    id: string,
 }
 export const SaveCard = ({ id }: SaveCardProps) => {
-    const [product, setProduct] = useState<productType>();
+    const [product, setProduct] = useState<productType>({} as productType);
     const { saveProduct, setSaveProduct } = useData()
+
     const handleRemoveSave = () => {
         const newSaveProduct = saveProduct.filter(product => product !== id)
         setSaveProduct(newSaveProduct)
     }
+
     useEffect(() => {
         const getProduct = async () => {
             try {
@@ -31,8 +33,9 @@ export const SaveCard = ({ id }: SaveCardProps) => {
                 console.log(err);
             }
         }
-        getProduct()
+        getProduct();
     }, [id])
+
     const showPrice = (price: number | undefined, discount: number | undefined) => {
         price = price === undefined ? 0 : price;
         const newPrice = stringPrice(price)
@@ -64,14 +67,14 @@ export const SaveCard = ({ id }: SaveCardProps) => {
     return (
         <div className='flex w-full gap-6'>
             <div style={{
-                backgroundImage: `url(${product?.images[0]})`,
+                backgroundImage: `url(${product.images ? product.images[0] : null})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }} className='w-[120px] h-[120px] rounded-2xl'></div>
             <div className='w-80 space-y-2'>
                 <div className='space-y-1'>
-                    <h1>{product?.name}</h1>
-                    <p className='font-bold text-sm'>{showPrice(product?.price, product?.salePercent)}</p>
+                    <h1>{product.name}</h1>
+                    <div className='font-bold text-sm'>{showPrice(product.price, product.salePercent)}</div>
                 </div>
                 <button className='bg-blue-600 px-3 py-1 text-white rounded-full text-sm'>Сагслах</button>
             </div>

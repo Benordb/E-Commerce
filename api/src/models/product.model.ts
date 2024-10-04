@@ -47,11 +47,11 @@ const productSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
-    category:{
-        type: [Schema.Types.ObjectId],
-        ref: "Category",
-        required: true,
-      },
+    category: {
+      type: [Schema.Types.ObjectId],
+      ref: "Category",
+      required: true,
+    },
   },
   { timestamps: true }
 );

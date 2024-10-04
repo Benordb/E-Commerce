@@ -4,15 +4,12 @@ import { useData } from "@/components/utils/dataProvider";
 
 export default function Save() {
     const { saveProduct } = useData()
+
     return (
         <div className="w-[528px] m-auto space-y-6">
-            <h1 className="font-bold text-xl">Хадгалсан бараа</h1>
+            <div className="flex font-bold text-xl gap-1">Хадгалсан бараа<div className="text-gray-400 font-normal">({saveProduct.length})</div></div>
             <div className="space-y-6 pb-6">
                 {saveProduct.map((item, index) => <SaveCard id={item} key={index} />)}
-            </div>
-            <div className="flex justify-between text-lg font-bold">
-                <p>Нийт: {saveProduct.length} бараа</p>
-                <p>{saveProduct.length == 0 ? '0₮' : '360’000₮'}</p>
             </div>
         </div>
     )

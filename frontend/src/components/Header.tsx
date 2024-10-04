@@ -8,10 +8,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './utils/authProvider';
 import { Profile } from './assets';
+import { useData } from './utils/dataProvider';
 
 export const Header = () => {
     const router = useRouter()
     const { user } = useAuth()
+    const { saveProduct } = useData()
     return (
         <div className='bg-black text-white flex justify-between px-8 py-4 mb-14 z-10'>
             <div className='flex items-center gap-4 w-72'>
@@ -27,8 +29,14 @@ export const Header = () => {
                 <IoSearchOutline className='absolute w-6 h-6 top-[6px] left-2' />
                 <Input className='w-80 px-10 bg-[#18181B] border-none' placeholder='Бүтээгдэхүүн хайх' /></div>
             <div className='flex gap-6 items-center'>
-                <PiHeartStraight onClick={() => router.push("/save")} className='w-5 h-5 cursor-pointer hover:text-blue-600' />
-                <PiShoppingCartSimpleLight onClick={() => router.push("/buy")} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
+                <div className="relative">
+                    <div className='absolute w-4 h-4 bg-blue-700 rounded-full -right-2 -top-2 flex justify-center items-center text-xs'>{saveProduct.length}</div>
+                    <PiHeartStraight onClick={() => router.push("/save")} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
+                </div>
+                <div className='relative'>
+                    <div className='absolute w-4 h-4 bg-blue-700 rounded-full -right-2 -top-2 flex justify-center items-center text-xs '>0</div>
+                    <PiShoppingCartSimpleLight onClick={() => router.push("/buy")} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
+                </div>
                 {user?._id ? (<Profile userName={user.name} />) : (<div className='space-x-2'>
                     <Button onClick={() => router.push("/register")} className='border border-blue-600 bg-transparent'>Бүртгүүлэх</Button>
                     <Button onClick={() => router.push("/login")} className='bg-blue-600'>Нэвтрэх</Button>
