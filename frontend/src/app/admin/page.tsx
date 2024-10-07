@@ -1,6 +1,10 @@
+"use client"
 import { SalesBarChart } from "@/components/admin";
+import { useAuth } from "@/components/utils/authProvider";
 import { FaDollarSign, FaRegClipboard } from "react-icons/fa6";
 export default function Admin() {
+    const { user } = useAuth()
+    console.log(user)
     return (
         <div className="flex gap-6 w-full mx-6">
             <div className="flex-1">

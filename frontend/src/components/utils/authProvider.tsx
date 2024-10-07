@@ -10,6 +10,7 @@ interface User {
     _id: string;
     email: string;
     name: string;
+    role: string;
     isVerified: boolean;
     lastLogin: string;
     createdAt: string;

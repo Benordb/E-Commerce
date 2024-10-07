@@ -1,13 +1,13 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import { FaPlus } from 'react-icons/fa'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
-import { FaCalendar, FaDollarSign } from "react-icons/fa";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from '../ui/select'
+import { FaDollarSign } from "react-icons/fa";
 import { MdOutlineCategory, MdOutlineCalendarToday, MdOutlineEdit } from "react-icons/md";
 import { IoSearchOutline, IoTrashOutline } from 'react-icons/io5';
 import { Input } from '../ui/input';
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Checkbox } from '../ui/checkbox';
 import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
@@ -37,8 +37,10 @@ interface productType {
     },
     category?: categoryType[]
 }
-
-export const ProductAll = () => {
+interface productAllType {
+    setTabs: Dispatch<SetStateAction<string>>;
+}
+export const ProductAll = ({ setTabs }: productAllType) => {
     const [products, setProducts] = useState<productType[]>([])
     useEffect(() => {
         const getProducts = async () => {
@@ -79,7 +81,7 @@ export const ProductAll = () => {
     }
     const showCategories = (product: productType) => {
         if (product.category) {
-            let categoryName = product.category.map(category => category.name).join(", ")
+            const categoryName = product.category.map(category => category.name).join(", ")
             return categoryName
         }
         return product._id
@@ -87,7 +89,7 @@ export const ProductAll = () => {
     // console.log(products[0].name)
     return (
         <div className='p-6 h-5/6'>
-            <Button><FaPlus className='mr-2' />Бүтээгдэхүүн нэмэх</Button>
+            <Button onClick={() => setTabs('add')}><FaPlus className='mr-2' />Бүтээгдэхүүн нэмэх</Button>
             <div className='flex justify-between mt-6 mb-4'>
                 <div className='flex gap-3'>
                     <Select>
