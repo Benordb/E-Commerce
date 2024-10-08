@@ -1,6 +1,6 @@
 "use client"
 import { api } from '@/lib/axios';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PiHeartStraightFill } from 'react-icons/pi'
 import { useData } from '../utils/dataProvider';
 

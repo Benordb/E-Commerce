@@ -21,11 +21,11 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-        <DataProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <DataProvider>
             {children}
-          </AuthProvider>
-        </DataProvider>
+          </DataProvider>
+        </AuthProvider>
         <Toaster richColors />
       </body>
     </html>

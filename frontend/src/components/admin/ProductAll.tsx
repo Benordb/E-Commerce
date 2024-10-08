@@ -14,6 +14,7 @@ import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
 import Image from 'next/image'
+import { useData } from '../utils/dataProvider'
 interface categoryType {
     _id: string,
     name: string
@@ -42,6 +43,7 @@ interface productAllType {
 }
 export const ProductAll = ({ setTabs }: productAllType) => {
     const [products, setProducts] = useState<productType[]>([])
+    const { categories } = useData()
     useEffect(() => {
         const getProducts = async () => {
             try {
@@ -97,9 +99,8 @@ export const ProductAll = ({ setTabs }: productAllType) => {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectLabel>Fruits</SelectLabel>
-                                <SelectItem value="apple">Apple</SelectItem>
-                                <SelectItem value="banana">Banana</SelectItem>
+                                <SelectLabel>Ерөнхий ангилал</SelectLabel>
+                                {categories.map((category, index) => <SelectItem key={index} value={category._id}>{category.name}</SelectItem>)}
                             </SelectGroup>
                         </SelectContent>
                     </Select>

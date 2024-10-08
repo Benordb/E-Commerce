@@ -6,6 +6,8 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { UploadImage } from './UploadImage';
+import { useData } from '../utils/dataProvider';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
 
 interface addProductFormValues {
     name: string,
@@ -25,6 +27,7 @@ interface addProductFormValues {
     category: string[],
 }
 export const AddProduct = () => {
+    const { categories } = useData()
     const addProductForm = useFormik<addProductFormValues>({
         initialValues: {
             name: "",
@@ -115,7 +118,7 @@ export const AddProduct = () => {
                         </div>
                     </div>
 
-                    <div className='bg-white p-6 rounded-xl'>
+                    <div className='bg-white p-6 rounded-xl space-y-2'>
                         <Label className='text-base'>Бүтээгдэхүүний зураг</Label>
                         <UploadImage />
                     </div>
@@ -157,8 +160,21 @@ export const AddProduct = () => {
                     </div>
                 </div>
                 <div className='flex-1 space-y-6'>
-                    <div className='bg-white p-6 rounded-xl'>w</div>
-                    <div className='bg-white p-6 rounded-xl'>
+                    <div className='bg-white p-6 rounded-xl space-y-2'>
+                        <Label>Ерөнхий ангилал</Label>
+                        <Select>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Сонгох" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Ерөнхий ангилал</SelectLabel>
+                                    {categories.map((category, index) => <SelectItem key={index} value={category._id}>{category.name}</SelectItem>)}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className='bg-white p-6 rounded-xl space-y-2'>
                         <Label className='text-lg' htmlFor='qty'>Тоо ширхэг</Label>
                         <div className='space-y-2 w-36'>
                             <div className='flex items-center justify-between'>
