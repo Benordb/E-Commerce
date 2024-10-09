@@ -1,29 +1,12 @@
 "use client"
 import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createContext, Dispatch, PropsWithChildren, SetStateAction, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 interface categoryDataType {
     _id: string,
     name: string,
-}
-interface createProductType {
-    name: string,
-    price: number,
-    salePercent: number,
-    description: string,
-    images: string[],
-    qty: {
-        free?: number;
-        s?: number;
-        m?: number;
-        l?: number;
-        xl?: number;
-        "2xl"?: number;
-        "3xl"?: number;
-    },
-    category: string,
 }
 interface DataContextType {
     carousel: string[];
@@ -42,7 +25,6 @@ const carouselData = [
 ];
 export const DataProvider = ({ children }: PropsWithChildren) => {
     const router = useRouter();
-    const pathname = usePathname();
 
     const [carousel, setCarousel] = useState<string[]>(carouselData);
     const [saveProduct, setSaveProduct] = useState<string[]>([])
@@ -63,11 +45,12 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
         }
         getCategories()
     }, [])
-    const createProduct = async (product: createProductType) => {
+    const createProduct = async (name: string, description: string, category: string, price: number, salePercent: number, images: string[], qty: object) => {
         try {
-            const res = await api.post("/product", { product })
+            const res = await api.post("/product", { name, description, category, price, salePercent, images, qty })
+            console.log(res)
             toast.success("Бүтээгдэхүүн амжилттай нэмэгдлээ")
-            router.refresh
+            router.push("/admin/product")
         } catch (err: unknown) {
             console.log(err)
             if (err instanceof AxiosError) {

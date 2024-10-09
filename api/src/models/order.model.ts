@@ -32,9 +32,25 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
       require: true,
     },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: Number,
+      require: true,
+    },
     address: {
       type: String,
       require: true,
+    },
+    info: {
+      type: String,
+      require: false,
     },
     description: {
       type: String,

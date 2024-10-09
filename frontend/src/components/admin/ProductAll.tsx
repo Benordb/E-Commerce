@@ -165,7 +165,7 @@ export const ProductAll = ({ setTabs }: productAllType) => {
                                 <TableCell>{totalQty(product.qty)}</TableCell>
                                 <TableCell>0</TableCell>
                                 <TableCell>{format(product.createdAt, "yyyy-MM-dd")}</TableCell>
-                                <TableCell className='flex justify-center items-center h-full gap-4'><IoTrashOutline className='hover:text-red-500 w-5 h-5 text-gray-400' /><MdOutlineEdit className='hover:text-blue-500 w-5 h-5 text-gray-400' /></TableCell>
+                                <TableCell><div className='flex justify-center items-center gap-4'><IoTrashOutline className='hover:text-red-500 w-5 h-5 text-gray-400' /><MdOutlineEdit className='hover:text-blue-500 w-5 h-5 text-gray-400' /></div></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -63,8 +63,7 @@ export const AddProduct = () => {
             category: yup.string().required("Ангилалаа оруулна уу!"),
         }),
         onSubmit: (values) => {
-            createProduct(values)
-            console.log(values)
+            createProduct(values.name, values.description, values.category, values.price, values.salePercent, values.images, values.qty)
         },
     })
     const showError = (
