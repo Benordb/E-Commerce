@@ -24,27 +24,19 @@ interface addProductFormValues {
         "2xl"?: number;
         "3xl"?: number;
     },
-    category: string[],
+    category: string,
 }
 export const AddProduct = () => {
-    const { categories } = useData()
+    const { categories, createProduct } = useData()
     const addProductForm = useFormik<addProductFormValues>({
         initialValues: {
             name: "",
             price: 0,
             salePercent: 0,
             description: "",
-            images: [""],
-            qty: {
-                free: 0,
-                s: 0,
-                m: 0,
-                l: 0,
-                xl: 0,
-                "2xl": 0,
-                "3xl": 0,
-            },
-            category: [],
+            images: [],
+            qty: {},
+            category: "",
         },
         validationSchema: yup.object({
             name: yup.string().required("Нэрээ оруулна уу!"),
@@ -67,10 +59,11 @@ export const AddProduct = () => {
                 .min(0, "0-ээс багагүй байх ёстой")
                 .max(100, "100-аас ихгүй байх ёстой"),
             description: yup.string().required("Нэмэлт мэдээлэл оруулна уу!"),
-            images: yup.string().required("Зураг оруулна уу!"),
+            images: yup.array().required("Зураг оруулна уу!"),
             category: yup.string().required("Ангилалаа оруулна уу!"),
         }),
         onSubmit: (values) => {
+            createProduct(values)
             console.log(values)
         },
     })
@@ -120,7 +113,8 @@ export const AddProduct = () => {
 
                     <div className='bg-white p-6 rounded-xl space-y-2'>
                         <Label className='text-base'>Бүтээгдэхүүний зураг</Label>
-                        <UploadImage />
+                        <UploadImage images={addProductForm.values.images}
+                            setImages={(images: string[]) => addProductForm.setFieldValue('images', images)} />
                     </div>
                     <div className='bg-white p-6 rounded-xl flex gap-4'>
                         <div className='flex-1 space-y-2'>
@@ -162,7 +156,11 @@ export const AddProduct = () => {
                 <div className='flex-1 space-y-6'>
                     <div className='bg-white p-6 rounded-xl space-y-2'>
                         <Label>Ерөнхий ангилал</Label>
-                        <Select>
+                        <Select onValueChange={(selectedValues) => {
+                            addProductForm.setFieldValue("category", selectedValues);
+                        }}
+                            value={addProductForm.values.category}
+                            name="category">
                             <SelectTrigger>
                                 <SelectValue placeholder="Сонгох" />
                             </SelectTrigger>
