@@ -1,55 +1,25 @@
 "use client"
-import { BuySteps, CartCard, CartCardDisable, ShippingInfo } from "@/components";
-import { useState } from "react";
-interface productType {
-    _id: string,
-    name: string,
-    price: number,
-    salePercent: number,
-    size: string,
-    quantity: number,
-    images: string[],
-}
-const defaultProductData: productType[] = [
-    {
-        _id: "1",
-        name: "Хувийн тувгалдаг оронтой",
-        price: 15000,
-        salePercent: 0,
-        size: "m",
-        quantity: 1,
-        images: ["https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611140/imageHat_qiq2za.png"],
-    },
-    {
-        _id: "2",
-        name: "Хувийн тувгалдаг оронтой",
-        price: 85000,
-        salePercent: 10,
-        size: "l",
-        quantity: 5,
-        images: ["https://res.cloudinary.com/dqhguhv7o/image/upload/v1725611140/imageHat_qiq2za.png"],
-    }
-]
+import { BuySteps, CartCard, CartCardDisable, Payment, ShippingInfo } from "@/components";
+import { useData } from "@/components/utils/dataProvider";
+import { useMemo, useState } from "react";
 export default function Buy() {
     const [step, setStep] = useState<number>(1)
+    const [prices, setPrices] = useState<number[]>([]);
+    const totalPrice = useMemo(() => {
+        return prices.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    }, [prices]);
+    const { cartProduct } = useData()
     const stringPrice = () => {
-        const sum = defaultProductData.reduce((accumulator, currentValue) => {
-            let productPrice = currentValue.price * currentValue.quantity;
-            if (currentValue.salePercent) {
-                productPrice = (currentValue.price - (currentValue.price * currentValue.salePercent / 100)) * currentValue.quantity;
-            }
-            return accumulator + productPrice;
-        }, 0)
-        return sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
+        return totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
     }
     return (
         <div className="space-y-12">
             <BuySteps step={step} />
             {
                 step === 1 && <div className="border max-w-[638px] m-auto bg-gray-50 rounded-2xl p-8 space-y-4">
-                    <div className="font-bold text-xl">1. Сагс <span className="text-gray-400 font-normal">({defaultProductData.length})</span></div>
+                    <div className="font-bold text-xl">1. Сагс <span className="text-gray-400 font-normal">({cartProduct.length})</span></div>
                     {
-                        defaultProductData.map(product => <CartCard key={product._id} image={product.images[0]} name={product.name} price={product.price} salePercent={product.salePercent} quantity={product.quantity} size={product.size} />)
+                        cartProduct.map((product, i) => <CartCard key={i} id={product.product} quantity={product.quantity} size={product.size} />)
                     }
                     <div className="flex justify-between"><p>Нийт төлөх дүн:</p><p className="font-bold text-xl">{stringPrice()}</p></div>
                     <div className="text-end pt-12">
@@ -59,15 +29,22 @@ export default function Buy() {
             }
             {
                 step === 2 && <div className="flex gap-5 m-auto w-fit">
-                    <div className="bg-gray-50 min-w-[333px] rounded-2xl py-8 px-6 space-y-4">
-                        <div className="font-bold text-lg">Сагс <span className="text-gray-400 font-normal">({defaultProductData.length})</span></div>
+                    <div className="bg-gray-50 border min-w-[333px] rounded-2xl py-8 px-6 space-y-4">
+                        <div className="font-bold text-lg">Сагс <span className="text-gray-400 font-normal">({cartProduct.length})</span></div>
                         {
-                            defaultProductData.map(product => <CartCardDisable key={product._id} image={product.images[0]} name={product.name} price={product.price} salePercent={product.salePercent} quantity={product.quantity} size={product.size} />)
+                            cartProduct.map((product, i) => <CartCardDisable key={i} id={product.product} quantity={product.quantity} size={product.size} />)
                         }
                         <div className="border-t border-dashed"></div>
                         <div className="flex justify-between"><p>Нийт төлөх дүн:</p><p className="font-bold text-lg">{stringPrice()}</p></div>
                     </div>
-                    <ShippingInfo setStep={setStep} />
+                    <ShippingInfo setStep={setStep} totalPrice={totalPrice} />
+                </div>
+            }
+            {
+                step === 3 && <div className="w-[687px] m-auto bg-gray-50 rounded-2xl p-8 border space-y-4">
+                    <div className="font-bold text-xl">3. Төлбөр төлөлт</div>
+                    <Payment />
+                    <button type='button' onClick={() => setStep(2)} className="bg-white border px-9 py-2 rounded-full text-sm">Буцах</button>
                 </div>
             }
         </div>

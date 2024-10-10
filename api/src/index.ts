@@ -11,6 +11,7 @@ import {
   productRouter,
   reviewRouter,
 } from "./routes";
+import { orderRouter } from "./routes/order.route";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use("/auth", authRouter);
 app.use("/product", productRouter);
 app.use("/category", categoryRouter);
 app.use("/review", reviewRouter);
+app.use("/order", orderRouter);
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,

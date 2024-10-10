@@ -4,17 +4,27 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { createContext, Dispatch, PropsWithChildren, SetStateAction, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import Cookies from "js-cookie"
+
 interface categoryDataType {
     _id: string,
     name: string,
 }
+interface cartProductType {
+    product: string,
+    quantity: number,
+    size: string,
+}
 interface DataContextType {
     carousel: string[];
     saveProduct: string[];
+    cartProduct: cartProductType[];
     categories: categoryDataType[];
-    setSaveProduct: Dispatch<SetStateAction<string[]>>;
     setCarousel: Dispatch<SetStateAction<string[]>>;
+    setSaveProduct: Dispatch<SetStateAction<string[]>>;
+    setCartProduct: Dispatch<SetStateAction<cartProductType[]>>;
     createProduct: (name: string, description: string, category: string, price: number, salePercent: number, images: string[], qty: object) => Promise<void>;
+    createOrder: (firstName: string, lastName: string, phoneNumber: string, address: string, totalPrice: number) => Promise<void>;
 }
 const DataContext = createContext<DataContextType>({} as DataContextType);
 
@@ -27,8 +37,9 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
     const router = useRouter();
 
     const [carousel, setCarousel] = useState<string[]>(carouselData);
-    const [saveProduct, setSaveProduct] = useState<string[]>([])
-    const [categories, setCategories] = useState<categoryDataType[]>([])
+    const [saveProduct, setSaveProduct] = useState<string[]>([]);
+    const [cartProduct, setCartProduct] = useState<cartProductType[]>([]);
+    const [categories, setCategories] = useState<categoryDataType[]>([]);
     useEffect(() => {
         const getCategories = async () => {
             try {
@@ -47,8 +58,7 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
     }, [])
     const createProduct = async (name: string, description: string, category: string, price: number, salePercent: number, images: string[], qty: object) => {
         try {
-            const res = await api.post("/product", { name, description, category, price, salePercent, images, qty })
-            console.log(res)
+            await api.post("/product", { name, description, category, price, salePercent, images, qty })
             toast.success("Бүтээгдэхүүн амжилттай нэмэгдлээ")
             router.push("/admin/product")
         } catch (err: unknown) {
@@ -60,9 +70,29 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
             }
         }
     }
+    const createOrder = async (firstName: string, lastName: string, phoneNumber: string, address: string, totalPrice: number) => {
+        try {
+            const token = Cookies.get("token");
+            if (!token) return;
+            await api.post("/order", { products: cartProduct, totalPrice, firstName, lastName, phoneNumber, address }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            toast.success("Бүтээгдэхүүн амжилттай нэмэгдлээ")
+            router.push("/buy/success")
+        } catch (err: unknown) {
+            console.log(err)
+            if (err instanceof AxiosError) {
+                toast.error(err.response?.data?.message || "Failed to logout")
+            } else {
+                toast.error("An unknown error occurred")
+            }
+        }
+    }
     return (
         <DataContext.Provider
-            value={{ saveProduct, setSaveProduct, carousel, setCarousel, categories, createProduct }}
+            value={{ saveProduct, setSaveProduct, cartProduct, setCartProduct, carousel, setCarousel, categories, createProduct, createOrder }}
         >
             {children}
         </DataContext.Provider>

@@ -19,7 +19,7 @@ interface productType {
     price: number,
     salePercent: number,
     description: string,
-    category: string[],
+    category: categoryType[],
     images: string[],
 }
 interface categoryType {
@@ -64,7 +64,7 @@ export const CategoryContent = () => {
         }
         getCategories()
     }, [])
-    const categoryfilteredProduct = categoryId === '' ? products : products.filter((product) => product.category.includes(categoryId))
+    const categoryfilteredProduct = categoryId === '' ? products : products.filter((product) => product.category.some((cat) => cat._id === categoryId))
     return (
         <Container>
             <div className='grid grid-cols-4'>

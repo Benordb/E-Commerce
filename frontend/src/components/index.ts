@@ -12,3 +12,4 @@ export * from "./BuySteps";
 export * from "./CartCard";
 export * from "./ShippingInfo";
 export * from "./CartCardDisable";
+export * from "./Payment";

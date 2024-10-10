@@ -1,32 +1,74 @@
+"use client"
+import { api } from '@/lib/axios';
+import { AxiosError } from 'axios';
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoTrashOutline } from 'react-icons/io5';
+import { toast } from 'sonner';
 
 interface CartCardProps {
-    image: string,
-    name: string,
-    price: number,
-    salePercent?: number,
+    id: string,
     size: string,
     quantity: number,
 }
-export const CartCard = ({ image, name, price, salePercent, size, quantity }: CartCardProps) => {
-    const stringPrice = () => {
-        if (salePercent) {
-            const productPrice = (price - (price * salePercent / 100)) * quantity
-            return productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
+interface productType {
+    _id: string,
+    name: string,
+    price: number,
+    salePercent: number,
+    description: string,
+    qty: {
+        free?: number;
+        s?: number;
+        m?: number;
+        l?: number;
+        xl?: number;
+        "2xl"?: number;
+        "3xl"?: number;
+    },
+    images: string[],
+}
+export const CartCard = ({ id, size, quantity }: CartCardProps) => {
+    const [product, setProduct] = useState<productType>({} as productType);
+    const [productPrice, setProductPrice] = useState<number>(0)
+    useEffect(() => {
+        const getProduct = async () => {
+            try {
+                const response = await api.get(`/product/${id}`)
+                setProduct(response.data.product)
+            } catch (err: unknown) {
+                console.log(err);
+                if (err instanceof AxiosError) {
+                    toast.error(err.response?.data?.message || "Login failed.");
+                } else {
+                    toast.error("An unknown error occurred.");
+                }
+            }
         }
-        const productPrice = price * quantity
+        getProduct()
+    }, [id])
+    useEffect(() => {
+        if (product) {
+            let calculatedPrice = product.price * quantity;
+
+            if (product.salePercent) {
+                calculatedPrice = (product.price - (product.price * product.salePercent) / 100) * quantity;
+            }
+
+            setProductPrice(calculatedPrice);
+        }
+    }, [product, quantity]);
+    const stringPrice = () => {
         return productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
     }
     return (
         <div className='p-4 border rounded-xl flex justify-between bg-white gap-6'>
             <div className='relative overflow-hidden min-w-24 h-24 rounded-lg'>
-                <Image src={image} layout='fill' objectFit="cover" alt='cart' />
+                <Image src={product.images && product.images[0]} style={{ objectFit: 'cover' }} fill alt={product.name} priority sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw" />
             </div>
             <div className='w-full text-start'>
                 <div className="flex flex-col justify-between h-full">
-                    <div>{name} <span className='font-bold'>( {size.toUpperCase()} )</span> </div>
+                    <div>{product.name} <span className='font-bold'>( {size.toUpperCase()} )</span> </div>
                     <div><button className='w-8 h-8 border border-black rounded-full'>-</button><span className='px-4'>{quantity}</span><button className='w-8 h-8 border border-black rounded-full'>+</button></div>
                     <div className='font-bold'>{stringPrice()}</div>
                 </div>

@@ -13,7 +13,7 @@ const orderProductSchema = new Schema(
     },
     size: {
       type: String,
-      enum: ["FREE", "S", "M", "L", "XL", "2XL", "3XL"],
+      enum: ["free", "s", "m", "l", "xl", "2xl", "3xl"],
     },
   },
   { _id: false }
@@ -41,7 +41,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       require: true,
     },
     address: {
@@ -49,10 +49,6 @@ const orderSchema = new mongoose.Schema(
       require: true,
     },
     info: {
-      type: String,
-      require: false,
-    },
-    description: {
       type: String,
       require: false,
     },

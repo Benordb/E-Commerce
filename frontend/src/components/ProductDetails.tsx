@@ -7,6 +7,7 @@ import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { api } from '@/lib/axios';
 import { useData } from './utils/dataProvider';
+import { useAuth } from './utils/authProvider';
 
 interface productType {
     _id: string,
@@ -33,8 +34,15 @@ interface reviewType {
     star: number;
     comment: string;
 }
+interface cartProductType {
+    product: string,
+    quantity: number,
+    size: string,
+}
 export const ProductDetails = () => {
     const { id } = useParams();
+    const { setCartProduct } = useData();
+    const { user } = useAuth()
     const [product, setProduct] = useState<productType>();
     const [products, setProducts] = useState<productType[]>([]);
     const [reviews, setReviews] = useState<reviewType[]>([])
@@ -105,6 +113,18 @@ export const ProductDetails = () => {
         const newSaveProduct = saveProduct.filter(product => product !== id)
         setSaveProduct(newSaveProduct)
     }
+    const handleCart = () => {
+        if (user?._id) {
+            const newCartProduct: cartProductType = {
+                product: id.toString(),
+                quantity: pieces,
+                size: chooseSize
+            }
+            setCartProduct(prevProducts => [...prevProducts, newCartProduct])
+        } else {
+            toast.info("Та нэвтэрнэ үү!!!")
+        }
+    }
     return (
         <Container>
             <div className='space-y-20'>
@@ -140,7 +160,7 @@ export const ProductDetails = () => {
                             </div>
                             <div className='space-y-2'>
                                 <p className='text-xl font-bold'>{stringPrice(product?.price || 0)}</p>
-                                <button className='px-9 py-2 bg-blue-600 text-white rounded-3xl'>Сагсанд нэмэх</button>
+                                <button onClick={handleCart} className='px-9 py-2 bg-blue-600 text-white rounded-3xl'>Сагсанд нэмэх</button>
                             </div>
                             <div className='absolute bottom-0 left-0 text-sm space-y-1'>
                                 <div className='flex gap-4'>

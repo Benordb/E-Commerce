@@ -6,7 +6,9 @@ export default function Layout({ children }: PropsWithChildren) {
     return (
         <>
             <Header />
-            {children}
+            <div style={{ minHeight: "calc(100vh - 370px - 128px)" }}>
+                {children}
+            </div>
             <Footer />
         </>
     );

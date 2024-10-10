@@ -3,6 +3,9 @@ import { api } from '@/lib/axios';
 import React, { useEffect, useState } from 'react'
 import { PiHeartStraightFill } from 'react-icons/pi'
 import { useData } from '../utils/dataProvider';
+import { toast } from 'sonner';
+import { useAuth } from '../utils/authProvider';
+import { useRouter } from 'next/navigation';
 
 interface productType {
     _id: string,
@@ -15,10 +18,29 @@ interface productType {
 interface SaveCardProps {
     id: string,
 }
+interface cartProductType {
+    product: string,
+    quantity: number,
+    size: string,
+}
 export const SaveCard = ({ id }: SaveCardProps) => {
     const [product, setProduct] = useState<productType>({} as productType);
-    const { saveProduct, setSaveProduct } = useData()
+    const { saveProduct, setSaveProduct, setCartProduct } = useData()
+    const { user } = useAuth()
+    const router = useRouter()
 
+    const handleCart = () => {
+        if (user?._id) {
+            const newCartProduct: cartProductType = {
+                product: id,
+                quantity: 1,
+                size: "free"
+            }
+            setCartProduct(prevProducts => [...prevProducts, newCartProduct])
+        } else {
+            toast.info("Та нэвтэрнэ үү!!!")
+        }
+    }
     const handleRemoveSave = () => {
         const newSaveProduct = saveProduct.filter(product => product !== id)
         setSaveProduct(newSaveProduct)
@@ -66,17 +88,17 @@ export const SaveCard = ({ id }: SaveCardProps) => {
     }
     return (
         <div className='flex w-full gap-6'>
-            <div style={{
+            <div onClick={() => router.push(`/product/${id}`)} style={{
                 backgroundImage: `url(${product.images ? product.images[0] : null})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-            }} className='w-[120px] h-[120px] rounded-2xl'></div>
+            }} className='w-[120px] h-[120px] rounded-2xl cursor-pointer'></div>
             <div className='w-80 space-y-2'>
                 <div className='space-y-1'>
                     <h1>{product.name}</h1>
                     <div className='font-bold text-sm'>{showPrice(product.price, product.salePercent)}</div>
                 </div>
-                <button className='bg-blue-600 px-3 py-1 text-white rounded-full text-sm'>Сагслах</button>
+                <button onClick={handleCart} className='bg-blue-600 px-3 py-1 text-white rounded-full text-sm'>Сагслах</button>
             </div>
             <button className='w-10 h-10 flex justify-center items-center'>
                 <PiHeartStraightFill onClick={handleRemoveSave} className='w-6 h-6' />
