@@ -1,12 +1,9 @@
 "use client"
 import { SaveCard } from "@/components/assets";
-import { useAuth } from "@/components/utils/authProvider";
 import { useData } from "@/components/utils/dataProvider";
 
 export default function Save() {
     const { saveProduct } = useData()
-    const { user } = useAuth()
-    console.log(user)
     return (
         <div className="w-[528px] m-auto space-y-6">
             <div className="flex font-bold text-xl gap-1">Хадгалсан бараа<div className="text-gray-400 font-normal">({saveProduct.length})</div></div>

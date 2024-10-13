@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             const res = await api.post("/auth/logout")
             Cookies.remove("token");
             setUser({} as User)
-            toast.success(res.data.message)
+            toast.info(res.data.message)
         } catch (err: unknown) {
             console.log(err)
             if (err instanceof AxiosError) {

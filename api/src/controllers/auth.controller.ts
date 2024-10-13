@@ -30,7 +30,7 @@ export const login = async (req: Request, res: Response) => {
     user.lastLogin = new Date();
     await user.save();
     res.json({
-      message: "Logged in successfully",
+      message: "Амжилттай нэвтэрлээ",
       token,
       user: {
         ...user.toObject(),
@@ -102,7 +102,7 @@ export const register = async (req: Request, res: Response) => {
 };
 export const logout = async (req: Request, res: Response) => {
   res.clearCookie("token");
-  res.status(200).json({ message: "Logged out successfully" });
+  res.status(200).json({ message: "Logged out" });
 };
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;

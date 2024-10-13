@@ -9,11 +9,19 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from './utils/authProvider';
 import { Profile } from './assets';
 import { useData } from './utils/dataProvider';
+import { toast } from 'sonner';
 
 export const Header = () => {
     const router = useRouter()
     const { user } = useAuth()
     const { saveProduct, cartProduct } = useData()
+    const handleOrder = () => {
+        if (user?._id) {
+            router.push('/buy')
+        } else {
+            toast.info("Та нэвтэрнэ үү!!!")
+        }
+    }
     return (
         <div className='bg-black text-white flex justify-between px-8 py-4 mb-14 z-10'>
             <div className='flex items-center gap-4 w-72'>
@@ -35,7 +43,7 @@ export const Header = () => {
                 </div>
                 <div className='relative'>
                     <div className='absolute w-4 h-4 bg-blue-700 rounded-full -right-2 -top-2 flex justify-center items-center text-xs '>{cartProduct.length}</div>
-                    <PiShoppingCartSimpleLight onClick={() => router.push("/buy")} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
+                    <PiShoppingCartSimpleLight onClick={handleOrder} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
                 </div>
                 {user?._id ? (<Profile userName={user.name} />) : (<div className='space-x-2'>
                     <Button onClick={() => router.push("/register")} className='border border-blue-600 bg-transparent'>Бүртгүүлэх</Button>

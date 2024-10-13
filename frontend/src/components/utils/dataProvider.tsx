@@ -80,6 +80,7 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
                 },
             })
             toast.success("Бүтээгдэхүүн амжилттай нэмэгдлээ")
+            setCartProduct([])
         } catch (err: unknown) {
             console.log(err)
             if (err instanceof AxiosError) {

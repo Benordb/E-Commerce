@@ -70,7 +70,9 @@ export const CartCard = ({ id, size, quantity }: CartCardProps) => {
     return (
         <div className='p-4 border rounded-xl flex justify-between bg-white gap-6'>
             <div className='relative overflow-hidden min-w-24 h-24 rounded-lg'>
-                <Image src={product.images && product.images[0]} style={{ objectFit: 'cover' }} fill alt={product.name} priority sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+                {
+                    product.images ? <Image src={product.images && product.images[0]} style={{ objectFit: 'cover' }} fill alt={product.name} priority sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw" /> : <div className='w-full h-full bg-blue-100'></div>
+                }
             </div>
             <div className='w-full text-start'>
                 <div className="flex flex-col justify-between h-full">

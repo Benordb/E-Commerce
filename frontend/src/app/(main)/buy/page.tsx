@@ -1,20 +1,81 @@
 "use client"
 import { BuySteps, CartCard, CartCardDisable, Payment, ShippingInfo } from "@/components";
 import { useData } from "@/components/utils/dataProvider";
-import { useEffect, useMemo, useState } from "react";
+import { api } from "@/lib/axios";
+import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+interface ProductType {
+    _id: string;
+    name: string;
+    price: number;
+    salePercent: number;
+    description: string;
+    qty: {
+        free?: number;
+        s?: number;
+        m?: number;
+        l?: number;
+        xl?: number;
+        "2xl"?: number;
+        "3xl"?: number;
+    };
+    images: string[];
+}
 export default function Buy() {
-    const [step, setStep] = useState<number>(3)
-    const [prices, setPrices] = useState<number[]>([]);
-    const totalPrice = useMemo(() => {
-        return prices.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    }, [prices]);
-    useEffect(() => {
-        setPrices(prev => [...prev, 0])
-    }, []);
     const { cartProduct } = useData()
+    const [step, setStep] = useState<number>(1)
+    const [products, setProducts] = useState<ProductType[]>([]);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const productIds = cartProduct.map(item => item.product);
+                const uniqueIds = Array.from(new Set(productIds)); // Remove duplicates
+
+                // Fetch all products in parallel
+                const responses = await Promise.all(
+                    uniqueIds.map(id => api.get(`/product/${id}`))
+                );
+
+                const fetchedProducts = responses.map(res => res.data.product as ProductType);
+                setProducts(fetchedProducts);
+            } catch (err: unknown) {
+                console.error(err);
+                if (err instanceof AxiosError) {
+                    toast.error(err.response?.data?.message || "Failed to fetch products.");
+                } else {
+                    toast.error("An unknown error occurred.");
+                }
+            }
+        };
+
+        if (cartProduct.length > 0) {
+            fetchProducts();
+        } else {
+            setProducts([]);
+            setTotalPrice(0);
+        }
+    }, [cartProduct]);
+
+    useEffect(() => {
+        let total = 0;
+        cartProduct.forEach(cartItem => {
+            const product = products.find(p => p._id === cartItem.product);
+            if (product) {
+                let price = product.price;
+                if (product.salePercent) {
+                    price = price - (price * product.salePercent) / 100;
+                }
+                total += price * cartItem.quantity;
+            }
+        });
+        setTotalPrice(total);
+    }, [products, cartProduct]);
+
     const stringPrice = () => {
         return totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
-    }
+    };
     return (
         <div className="space-y-12">
             <BuySteps step={step} />

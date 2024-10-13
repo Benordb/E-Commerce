@@ -100,8 +100,9 @@ export const ProductDetails = () => {
     const [pieces, setPieces] = useState<number>(1)
     const [showReview, setShowReview] = useState<boolean>(false)
     const chooseSizePieces: number = product?.qty?.[chooseSize as keyof typeof product.qty] || 0;
-    const stringPrice = (price: number) => {
-        return (price * pieces).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
+    const stringPrice = (price: number, discount: number) => {
+        const discountedPrice = price - (price * discount / 100)
+        return (discountedPrice * pieces).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";
     }
     const initialValue = 0;
     const productReviewStarNumber = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.star, initialValue,) / reviews.length
@@ -159,7 +160,7 @@ export const ProductDetails = () => {
                                 <ProductPieces chooseSizePieces={chooseSizePieces} pieces={pieces} setPieces={setPieces} />
                             </div>
                             <div className='space-y-2'>
-                                <p className='text-xl font-bold'>{stringPrice(product?.price || 0)}</p>
+                                <p className='text-xl font-bold'>{stringPrice(product?.price || 0, product?.salePercent || 0)}</p>
                                 <button onClick={handleCart} className='px-9 py-2 bg-blue-600 text-white rounded-3xl'>Сагсанд нэмэх</button>
                             </div>
                             <div className='absolute bottom-0 left-0 text-sm space-y-1'>
