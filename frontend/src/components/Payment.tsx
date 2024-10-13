@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const images = [
     "https://res.cloudinary.com/dqhguhv7o/image/upload/v1728477160/StateBank_xuqtes.png",
@@ -15,8 +16,8 @@ const images = [
 ];
 
 export const Payment = () => {
-    const [timeLeft, setTimeLeft] = useState<number>(15 * 60); // 15 minutes in seconds
-
+    const [timeLeft, setTimeLeft] = useState<number>(10);
+    const router = useRouter()
     useEffect(() => {
         const intervalId = setInterval(() => {
             setTimeLeft(prevTime => {
@@ -26,10 +27,13 @@ export const Payment = () => {
                 }
                 return prevTime - 1;
             });
-        }, 1000); // Update every second
-
-        return () => clearInterval(intervalId); // Cleanup on unmount
+        }, 1000);
+        return () => clearInterval(intervalId);
     }, []);
+    if (timeLeft === 0) {
+        router.push("/buy/success")
+    }
+    console.log(timeLeft)
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;

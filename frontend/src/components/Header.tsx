@@ -13,7 +13,7 @@ import { useData } from './utils/dataProvider';
 export const Header = () => {
     const router = useRouter()
     const { user } = useAuth()
-    const { saveProduct } = useData()
+    const { saveProduct, cartProduct } = useData()
     return (
         <div className='bg-black text-white flex justify-between px-8 py-4 mb-14 z-10'>
             <div className='flex items-center gap-4 w-72'>
@@ -34,7 +34,7 @@ export const Header = () => {
                     <PiHeartStraight onClick={() => router.push("/save")} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
                 </div>
                 <div className='relative'>
-                    <div className='absolute w-4 h-4 bg-blue-700 rounded-full -right-2 -top-2 flex justify-center items-center text-xs '>0</div>
+                    <div className='absolute w-4 h-4 bg-blue-700 rounded-full -right-2 -top-2 flex justify-center items-center text-xs '>{cartProduct.length}</div>
                     <PiShoppingCartSimpleLight onClick={() => router.push("/buy")} className='w-6 h-6 cursor-pointer hover:text-blue-600' />
                 </div>
                 {user?._id ? (<Profile userName={user.name} />) : (<div className='space-x-2'>

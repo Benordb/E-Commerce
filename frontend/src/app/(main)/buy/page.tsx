@@ -1,13 +1,16 @@
 "use client"
 import { BuySteps, CartCard, CartCardDisable, Payment, ShippingInfo } from "@/components";
 import { useData } from "@/components/utils/dataProvider";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 export default function Buy() {
-    const [step, setStep] = useState<number>(1)
+    const [step, setStep] = useState<number>(3)
     const [prices, setPrices] = useState<number[]>([]);
     const totalPrice = useMemo(() => {
         return prices.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     }, [prices]);
+    useEffect(() => {
+        setPrices(prev => [...prev, 0])
+    }, []);
     const { cartProduct } = useData()
     const stringPrice = () => {
         return totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "₮";

@@ -80,7 +80,6 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
                 },
             })
             toast.success("Бүтээгдэхүүн амжилттай нэмэгдлээ")
-            router.push("/buy/success")
         } catch (err: unknown) {
             console.log(err)
             if (err instanceof AxiosError) {
