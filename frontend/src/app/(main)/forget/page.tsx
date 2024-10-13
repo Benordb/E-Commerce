@@ -2,7 +2,6 @@
 import { ForgotPassword, OTP, ResetPassword } from "@/components";
 import { useState } from "react";
 
-
 export default function Forget() {
     const [next, setNext] = useState(0)
     return (
